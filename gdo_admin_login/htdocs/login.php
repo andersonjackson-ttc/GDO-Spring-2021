@@ -3,7 +3,7 @@
 	$msg = "";
 
 	$page_title = 'Girl\'s Day Out - Log In';
-	include_once ('includes/errorhandling.php')
+	include_once ('includes/errorhandling.php');
 	include_once ('includes/frame.html');
 
 	if (isset($_POST['submit'])) {
