@@ -181,10 +181,10 @@ public class MainController {
         applicantRepository.save(a);
 
         // sends confirmation e-mail to applicant after application data is sent to the db
-        notificationService.emailApplicant(a);
+        // TODO notificationService.emailApplicant(a);
 
         //passes all admins, type string, and the applicant object to the method that e-mails approvers of a new application
-        notificationService.emailApprovers(adminRepository.findAll(), "application", a);
+        // TODO notificationService.emailApprovers(adminRepository.findAll(), "application", a);
  
         //the return statement redirects to the application/submit/recordID page.
         return "redirect:/application/submit/" + a.getRecordId();
