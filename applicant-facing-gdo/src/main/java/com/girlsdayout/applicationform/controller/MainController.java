@@ -187,7 +187,14 @@ public class MainController {
         // TODO notificationService.emailApprovers(adminRepository.findAll(), "application", a);
  
         //the return statement redirects to the application/submit/recordID page.
-        return "redirect:/application/submit/" + a.getRecordId();
+        if(a.getAppStatus() == "Waitlist")
+        {
+        	return "redirect:/application/Waitlist/" + a.getRecordId();
+        }
+        else
+        {
+            return "redirect:/application/submit/" + a.getRecordId();
+        }
 
     }
 
@@ -235,6 +242,10 @@ public class MainController {
     //returns submit.html for //application/submit/{id} path where {id} is recordID
     @RequestMapping(path = "application/submit/{id}")
     public String submit() {return "submit.html";}
+    
+  //returns Waitlist.html for //application/Waitlist/{id} path where {id} is recordID
+    @RequestMapping(path = "application/Waitlist/{id}")
+    public String Waitlist() {return "Waitlist.html";}
 
     /*
      * method that uploads the waivers to the desired directory on the server. Method also saves path files of
