@@ -87,7 +87,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         if(mysqli_query ($dbc, $q))
         {
-            
+            $s = mysqli_query($dbc, "SELECT count(*) as count FROM applicant WHERE application_status='Approved' OR application_status='Pending'");
+            $t = mysqli_query($dbc, "SELECT max_applicants as max FROM max_applicants");
+            $rs = mysqli_fetch_assoc($s);
+            $rt = mysqli_fetch_assoc($t);
+            if($rs['count'] < $rt['max'])
+            {
+            	$year = date("Y");
+                $next = mysqli_query($dbc, "SELECT MIN(id) as minimum FROM applicant WHERE application_status='Waitlist' AND year_submitted='$year'");
+                $nextresult = mysqli_fetch_assoc($next);
+                $rnext = $nextresult['minimum'];
+                if($rnext['minimum'] != 0)
+                {
+                    $s = mysqli_query($dbc, "UPDATE applicant SET application_status='Pending' WHERE id=$rnext");
+                    mysqli_query($dbc, $s);
+                }
+            }
         }
         else
         {
