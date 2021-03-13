@@ -199,7 +199,7 @@ public class MainController {
     }
 
     //Prevents a 405 whitelabel error page when users type in application/submit instead of submitting application to get there
-    @GetMapping(path = { "application/submit", "contactus/send", "waiver/{id}/submit"})
+    @GetMapping(path = { "application/submit", "requestcancel/send", "contactus/send", "waiver/{id}/submit"})
     public String replacingError() {return "405.html";}
 
     //this Get method returns json of the applicant, found by record ID, which is fetched by the javascript pages that needs it
@@ -224,6 +224,10 @@ public class MainController {
     //returns contact.html for /contactus path
     @RequestMapping(path = "contactus")
     public String contactUs() {return "contact.html";}
+
+    //returns requestcancel.html for /requestcancel path
+    @RequestMapping(path = "requestcancel")
+    public String requestCancel() {return "requestcancel.html";}
 
     //returns faq.html for /faqs path
     @RequestMapping(path = "faqs")
@@ -313,5 +317,16 @@ public class MainController {
 
         //returns simple page that tells the user the message has been sent.
         return "messagesent.html";
+    }
+
+//method that takes the information sent in the cancellation request form and e-mails it to the GDO admin e-mail.
+    @PostMapping(path="requestcancel/send")
+    public String sendRequestCancel(@RequestParam String studentname, @RequestParam String parentname, @RequestParam String email, @RequestParam String message){
+
+        //passing user input values from request cancel form to notification service to send out email
+        //TODO notificationService.contactEmail(studentname, parentname, email, reason);
+
+        //returns simple page that tells the user the message has been sent.
+        return "requestsent.html";
     }
 }

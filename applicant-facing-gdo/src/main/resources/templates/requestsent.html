@@ -11,7 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="/js/master_gdo.js" type="text/javascript"></script>
 
-    <title>Contact Us | Girl's Day Out</title>
+    <title>Cancel an Application | Girl's Day Out</title>
   </head>
   <body>
     <!-- start of toolbar-->
@@ -30,7 +30,7 @@
         <div class="spacer"></div>
         <div>
           <img
-            src="images/smallgdologo.png"
+            src="/images/smallgdologo.png"
             alt="Small Girl's Day Out Logo"
             class="toolbar-logo"
           />
@@ -64,7 +64,7 @@
           <div>
             <li class="image2">
               <img
-                src="images/gdologo.png"
+                src="/images/gdologo.png"
                 alt="Girl's Day Out 2020 Logo"
                 class="side-drawer-image"
               />
@@ -79,35 +79,11 @@
     <!-- start of div for content -->
     <div class="content">
       <div class="contactform">
-        <h1>Contact Us</h1>
+        <h1>Cancel an Application</h1>
 
         <p>
-          Got a question or concern? We'd love to hear from you. Send us a
-          message and we'll respond as soon as possible!
+          Your request has been sent. We will review this and respond as soon as we can.
         </p>
-        <p>If you would like to cancel an application, please visit our <a href="/requestcancel">Cancellation Request Page</a> for the proper contact form.
-        </p>
-        <form action="/contactus/send" method="post">
-          <label for="name">Name<span style="color: red;">*</span></label
-          ><input type="text" name="name" id="name" required />
-          <label for="email">E-Mail<span style="color: red;">*</span></label
-          ><input type="email" name="email" id="email" required />
-          <label for="message">Message<span style="color: red;">*</span></label
-          ><textarea
-            name="message"
-            id="message"
-            rows="5"
-            columns="10"
-            maxlength="500"
-            onkeyup="countMessChars(this)"
-            required
-          >
-          </textarea>
-          <span id="mess-chars" style="color: white;"
-            ><!-- Inserted by JS --></span
-          >
-          <input type="submit" value="Send Message" />
-        </form>
       </div>
     </div>
     <!-- end of div for content-->
