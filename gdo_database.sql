@@ -249,6 +249,17 @@ CREATE TABLE IF NOT EXISTS `waivers` (
   KEY `Index` (`ApplicantId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- Table structure for table 'max_applicants'
+--
+
+DROP TABLE IF EXISTS `max_applicants`;
+CREATE TABLE IF NOT EXISTS `max_applicants` (
+	`max_applicants` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `max-applicants` (`max-applicants`) VALUES
+(125);
+
 --
 -- Constraints for dumped tables
 --

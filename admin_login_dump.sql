@@ -104,6 +104,22 @@ CREATE TABLE `hibernate_sequence` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `max_applicants`
+--
+
+DROP TABLE IF EXISTS `max_applicants`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `max_applicants` (
+  `max_applicants` int(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+INSERT INTO `max_applicants` VALUES (
+  125
+);
+
+--
 -- Table structure for table `parent`
 --
 

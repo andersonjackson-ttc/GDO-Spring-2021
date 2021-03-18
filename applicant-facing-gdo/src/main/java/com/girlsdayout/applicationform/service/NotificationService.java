@@ -125,4 +125,23 @@ public class NotificationService {
         //sending the mail object
         javaMailSender.send(mail);
     }
+
+    public void emailApprovedApplicant(Applicant a) throws MessagingException {
+
+        //creating a new email object
+        MimeMessage mail = javaMailSender.createMimeMessage();
+
+        //creating helper object needed to add to/from/content/attachments to e-mail
+        MimeMessageHelper helper = new MimeMessageHelper(mail, true);
+
+        //setting the email subject
+        helper.setSubject("Your Girls Day Out 2021 Application Decision is Ready!");
+
+        //setting the email body
+        helper.setText("Hello " + a.getfName() + ",\n\n" +
+                "To view your Girls Day Out 2021 application decision, " +
+                "log in to your application portal here: localhost:8080/application/status/" +
+                "\n\n If you need anything at all, just let us know." +
+                "\nAnd thank you, " + a.getfName() + ", for applying to the Girls Day Out 2021!" + "\n\n");
+    }
 }

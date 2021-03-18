@@ -181,18 +181,25 @@ public class MainController {
         applicantRepository.save(a);
 
         // sends confirmation e-mail to applicant after application data is sent to the db
-        notificationService.emailApplicant(a);
+        // TODO notificationService.emailApplicant(a);
 
         //passes all admins, type string, and the applicant object to the method that e-mails approvers of a new application
-        notificationService.emailApprovers(adminRepository.findAll(), "application", a);
+        // TODO notificationService.emailApprovers(adminRepository.findAll(), "application", a);
  
         //the return statement redirects to the application/submit/recordID page.
-        return "redirect:/application/submit/" + a.getRecordId();
+        if(a.getAppStatus() == "Waitlist")
+        {
+        	return "redirect:/application/Waitlist/" + a.getRecordId();
+        }
+        else
+        {
+            return "redirect:/application/submit/" + a.getRecordId();
+        }
 
     }
 
     //Prevents a 405 whitelabel error page when users type in application/submit instead of submitting application to get there
-    @GetMapping(path = { "application/submit", "contactus/send", "waiver/{id}/submit"})
+    @GetMapping(path = { "application/submit", "requestcancel/send", "contactus/send", "waiver/{id}/submit"})
     public String replacingError() {return "405.html";}
 
     //this Get method returns json of the applicant, found by record ID, which is fetched by the javascript pages that needs it
@@ -218,6 +225,10 @@ public class MainController {
     @RequestMapping(path = "contactus")
     public String contactUs() {return "contact.html";}
 
+    //returns requestcancel.html for /requestcancel path
+    @RequestMapping(path = "requestcancel")
+    public String requestCancel() {return "requestcancel.html";}
+
     //returns faq.html for /faqs path
     @RequestMapping(path = "faqs")
     public String faq() {return "faq.html";}
@@ -235,6 +246,10 @@ public class MainController {
     //returns submit.html for //application/submit/{id} path where {id} is recordID
     @RequestMapping(path = "application/submit/{id}")
     public String submit() {return "submit.html";}
+    
+  //returns Waitlist.html for //application/Waitlist/{id} path where {id} is recordID
+    @RequestMapping(path = "application/Waitlist/{id}")
+    public String Waitlist() {return "Waitlist.html";}
 
     /*
      * method that uploads the waivers to the desired directory on the server. Method also saves path files of
@@ -302,5 +317,16 @@ public class MainController {
 
         //returns simple page that tells the user the message has been sent.
         return "messagesent.html";
+    }
+
+//method that takes the information sent in the cancellation request form and e-mails it to the GDO admin e-mail.
+    @PostMapping(path="requestcancel/send")
+    public String sendRequestCancel(@RequestParam String studentname, @RequestParam String parentname, @RequestParam String email, @RequestParam String message){
+
+        //passing user input values from request cancel form to notification service to send out email
+        //TODO notificationService.contactEmail(studentname, parentname, email, reason);
+
+        //returns simple page that tells the user the message has been sent.
+        return "requestsent.html";
     }
 }
