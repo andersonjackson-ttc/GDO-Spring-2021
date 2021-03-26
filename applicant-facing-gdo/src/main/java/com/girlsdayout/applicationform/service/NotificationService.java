@@ -16,6 +16,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class NotificationService {
@@ -124,6 +126,57 @@ public class NotificationService {
 
         //sending the mail object
         javaMailSender.send(mail);
+    }
+
+    public void cancellationEmail(String name, String email, String message){
+
+	//creating a timestamp of the current date and time
+	LocalDateTime dateTime = LocalDateTime.now();
+
+	//formatting the date and time
+	DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
+	String formattedDateTime = dateTime.format(dateTimeFormat);
+
+	//parent email address that is receiving the cancellation notification
+	String toAddress = email;
+
+        //email address that is receiving the cancellation form messages, assigned to toAdminAddress
+        String toAdminAddress = "gdosummercamp@gmail.com";
+
+        //creating new simplemailmessage object
+        SimpleMailMessage mail = new SimpleMailMessage();
+
+	//creating new admin simplemailmessage object
+	SimpleMailMessage adminMail = new SimpleMailMessage();
+
+        //setting the "To" field of parent email
+        mail.setTo(toAddress);
+
+        //setting the subject field of parent email
+        mail.setSubject("Girl's Day Out Cancellation);
+
+	//setting the text field of parent email
+	mail.setText("A request for the cancellation of " + name + "'s application to Girls Day out has been made on " + formattedDateTime + 
+		".\nIf the cancellation request was not made by you or you wish to revoke your request, please message us through our website" +
+		"\nwithin 48 hours of receiving this email." + 
+		"\n\n**** THIS IS AN AUTOMATED MESSAGE PLEASE DO NOT REPLY TO THIS EMAIL ****");
+
+	//setting the "To" field of the admin email
+	adminMail.setTo(toAdminAddress);
+
+	//setting the subject field of admin email
+	adminMail.setSubject("Girls Day Out Cancellation");
+
+        //setting the text field of admin email
+        adminMail.setText("A new message has been sent through the Cancellation page on the GDO website. Please view the message below:\n\n" +
+                "Name: " + name + "\nE-Mail Address: " + email + "\n\nMessage: " + message + "\n\nat:" + formattedDateTime +
+                "\n\n**** THIS IS AN AUTOMATED MESSAGE PLEASE DO NOT REPLY TO THIS EMAIL ****");
+
+        //sending the mail object
+        javaMailSender.send(mail);
+
+	//sending the adminMail object
+	javaMailSender.sent(adminMail);
     }
 
     public void emailApprovedApplicant(Applicant a) throws MessagingException {
