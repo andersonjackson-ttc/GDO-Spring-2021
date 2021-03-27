@@ -128,7 +128,7 @@ public class NotificationService {
         javaMailSender.send(mail);
     }
 
-    public void cancellationEmail(String name, String email, String message){
+    public void cancellationEmail(String studentName, String parentName, String email, String message){
 
 	//creating a timestamp of the current date and time
 	LocalDateTime dateTime = LocalDateTime.now();
@@ -156,7 +156,7 @@ public class NotificationService {
     mail.setSubject("Girl's Day Out Cancellation");
 
 	//setting the text field of parent email
-	mail.setText("A request for the cancellation of " + name + "'s application to Girls Day out has been made on " + formattedDateTime + 
+	mail.setText("A request for the cancellation of " + studentName + "'s application to Girls Day out has been made on " + formattedDateTime + 
 		".\nIf the cancellation request was not made by you or you wish to revoke your request, please message us through our website" +
 		"\nwithin 48 hours of receiving this email." + 
 		"\n\n**** THIS IS AN AUTOMATED MESSAGE PLEASE DO NOT REPLY TO THIS EMAIL ****");
@@ -169,7 +169,7 @@ public class NotificationService {
 
     //setting the text field of admin email
     adminMail.setText("A new message has been sent through the Cancellation page on the GDO website. Please view the message below:\n\n" +
-         "Name: " + name + "\nE-Mail Address: " + email + "\n\nMessage: " + message + "\n\nat:" + formattedDateTime +
+         "Student's Name: " + studentName + "\nParent's Name:" + parentName + "\nE-Mail Address: " + email + "\n\nMessage: " + message + "\n\nat:" + formattedDateTime +
          "\n\n**** THIS IS AN AUTOMATED MESSAGE PLEASE DO NOT REPLY TO THIS EMAIL ****");
 
     //sending the mail object
