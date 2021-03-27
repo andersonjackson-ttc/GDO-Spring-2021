@@ -102,6 +102,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $s = mysqli_query($dbc, "UPDATE applicant SET application_status='Pending' WHERE id=$rnext");
                     mysqli_query($dbc, $s);
                 }
+                //sends an email to the student to notify them of their change in status from Waitlist to Pending
+                $m = mysqli_query($dbc, "SELECT email FROM applicant WHERE id=$rnext");
+                $mail = mysqli_fetch_assoc($m);
+                $studentemail = $mail['email'];
+                $mailsubject = "An update to your Girl's Day Out $year application status";
+                $mailcontents = "Your application has moved from the wait list, and is now awaiting review by our approval staff.\n If you have any questions regarding this email, please contact us on the Girl's Day Out website contact page.";
+                if (mail($studentemail,$mailsubject,$mailcontents))
+                {
+                	echo 'An email has been sent to ', $studentemail;
+                }
+                else
+                {
+                	echo 'Email failed to send to ', $studentemail;
+                }
             }
         }
         else
@@ -182,7 +196,7 @@ if (mysqli_num_rows($r) == 1)
                     <div class="form-group row">
                         <label for="email" class=" col-sm-4 col-form-label">Email Address: </label>
                         <div class="col-sm-8">
-                            <label class="form-control-plaintext" style="color: #356f94; font-style: italic;" id="email">'. @$row['first_name'] .'</label>
+                            <label class="form-control-plaintext" style="color: #356f94; font-style: italic;" id="email">'. @$row['email'] .'</label>
                         </div>
                     </div>
                     <div class="form-group row">
