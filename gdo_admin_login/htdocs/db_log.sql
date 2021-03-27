@@ -32,11 +32,11 @@ DROP TABLE IF EXISTS `log`;
 CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `changed_to` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
-  `changed_from` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
-  `mail_type` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
+  `changed_to` varchar(15) COLLATE utf8_unicode_ci NULL,
+  `changed_from` varchar(15) COLLATE utf8_unicode_ci NULL,
+  `mail_type` varchar(15) COLLATE utf8_unicode_ci NULL,
   `time_submitted` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
-  `date_submitted` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `date_submitted` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `year_submitted` int(4) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

@@ -27,14 +27,17 @@
 				echo '<option value="basic"'; if (($_POST['query'])=='basic'){echo 'selected';} echo '>Basic</option>
 				<option value="everything"'; if (($_POST['query'])=='everything'){echo 'selected';} echo '>Everything</option>
 		 		<option value="groups"'; if (($_POST['query'])=='groups'){echo 'selected';} echo '>Group Assignment</option>
-		 		<option value="contactInfo"'; if (($_POST['query'])=='contactInfo'){echo 'selected';} echo '>Contact Info</option>';
+		 		<option value="contactInfo"'; if (($_POST['query'])=='contactInfo'){echo 'selected';} echo '>Contact Info</option>
+		 		<option value="adminLogs"'; if (($_POST['query'])=='adminLogs'){echo 'selected';} echo '>Administrative Logs</option>';
+
 			}
 			else
 			{
 				echo '<option value="basic">Basic</option>
 				<option value="everything">Everything</option>
 		 		<option value="groups">Group Assignment</option>
-		 		<option value="contactInfo">Contact Info</option>';
+		 		<option value="contactInfo">Contact Info</option>
+		 		<option value="adminLogs">Administrative Logs</option>';
 			}
 			?>
 			<option></option>
@@ -116,6 +119,10 @@ else
 	{
 		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name', phone_number AS 'Phone Number' FROM applicant $order_by LIMIT $start, $display";
 	//add the querys for parent or emergency contact info
+	}
+	elseif($_POST['query'] == 'adminLogs')
+	{
+		$q = "SELECT id AS 'ID', type AS 'Type', changed_to AS 'Changed to', changed_from AS 'Changed from', mail_type AS 'Mail type', time_submitted AS 'Time', date_submitted AS 'Date', year_submitted AS 'Year' FROM log $order_by LIMIT $start, $display";
 	}
 	else
 	{
