@@ -1,8 +1,6 @@
 <?php session_start();?>
 <?php
 
-    require('../mysqli_connect_admin_table.php');
-
     include_once("includes/header.php");
     
 	$page_title = 'Send a Message'; 
@@ -15,7 +13,7 @@
 
     <form class="form-inline row justify-content-center" action="<?php echo htmlentities($_SERVER['PHP_SELF'])?>" method="GET">
         <div class="form-group  px-2">
-        <label for="app_stat_selection" style="padding-right: 1em">Application Status</label>
+        <label for="app_stat_selection" style="padding-right: 1em">Select a group</label>
             <select class="form-control" id="app_stat_selection" name="type">
                 <option value="none" selected disabled>Select an Option</option>
                 <option value="All">All</option>
@@ -32,8 +30,5 @@
         <button type="submit" class="btn btn-primary">Submit</button> 
     </form>
    
-            
-<?php
-
 
 <?php include_once("includes/footer.html");?>
