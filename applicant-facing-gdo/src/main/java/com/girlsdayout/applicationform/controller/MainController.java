@@ -324,7 +324,7 @@ public class MainController {
     public String sendRequestCancel(@RequestParam String studentname, @RequestParam String parentname, @RequestParam String email, @RequestParam String message){
 
         //passing user input values from request cancel form to notification service to send out email
-        //TODO notificationService.contactEmail(studentname, parentname, email, reason);
+        notificationService.cancellationEmail(studentname, parentname, email, message);
 
         //returns simple page that tells the user the message has been sent.
         return "requestsent.html";
