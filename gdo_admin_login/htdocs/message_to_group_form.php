@@ -5,29 +5,24 @@
     
 	$page_title = 'Send a Message'; 
 	include_once ('includes/frame.html');
-?>
 
-<div class="row justify-content-center">            
+    if($_SERVER['REQUEST_METHOD'] == 'POST'){
+        if(!empty($_POST['subject']) && !empty($_POST['message'])){
+            $body = "Subject: {$_POST['subject']}\nMessage: {$_POST['message']}";
+            $body = wordwrap($body, 1000);
+            mail('applicantsMailsFromDB@example.com', 'Important notice GDO', $body, "From: GDO admission");
+            echo'<p><em>Message sent!</em></p>';
+            $_POST = [];
+        } else{
+            echo'<p style="font-weight: bold>Please fill out the form completely<\p>';
+        }
+    }
+?>            
     <h1>Send a Message</h1>
-</div>
-
-    <form class="form-inline row justify-content-center" action="<?php echo htmlentities($_SERVER['PHP_SELF'])?>" method="GET">
-        <div class="form-group  px-2">
-        <label for="app_stat_selection" style="padding-right: 1em">Select a group</label>
-            <select class="form-control" id="app_stat_selection" name="type">
-                <option value="none" selected disabled>Select an Option</option>
-                <option value="All">All</option>
-                <option value="Pending">Pending</option>
-                <option value="Approved">Approved</option>
-                <option value="Denied">Denied</option>
-                <?php $type = $_GET['type'];?>
-            </select>
-
-        </div> 
-        <td><label for="message" style="padding-right: 1em">Message</label>
-        <textarea name="message" id="message" cols="80" rows="10" style="border:none" required></textarea>
-        </td>
-        <button type="submit" class="btn btn-primary">Submit</button> 
+    <form action="message_to_group_form.php" method="post">
+        <p>Subject: <input type="text" name="subject" size="30" maxlength="70" value="<?php if(isset($_POST['subject'])) echo $_POST['subject']; ?>"></p>
+        <p>Subject: <textarea name="message" rows="20" cols="30"><?php if(isset($_POST['message'])) echo $_POST['message']; ?></textarea></p>
+        <p><input type="submit" name="submit" value="Send email"></p>
     </form>
    
 
