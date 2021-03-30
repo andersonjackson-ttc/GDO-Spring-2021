@@ -1,8 +1,10 @@
 package com.girlsdayout.applicationform.controller;
 
 import com.girlsdayout.applicationform.model.Applicant;
+import com.girlsdayout.applicationform.model.Log;
 import com.girlsdayout.applicationform.repository.AdminRepository;
 import com.girlsdayout.applicationform.repository.ApplicantRepository;
+import com.girlsdayout.applicationform.repository.LogRepository;
 import com.girlsdayout.applicationform.service.NotificationService;
 import com.girlsdayout.applicationform.service.WaiverUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class MainController {
 
     @Autowired
     AdminRepository adminRepository;
+
+    @Autowired
+    LogRepository logRepository;
 
     @Autowired
     private NotificationService notificationService;
@@ -179,6 +184,19 @@ public class MainController {
 
         //saves the applicant object to the database
         applicantRepository.save(a);
+
+	//writes the sending of an application email to the log
+	Log l = new Log();
+	l.setId(a.getId());
+	String typeEmail = "Email";
+	l.setType(typeEmail);
+	String mailType = "Application";
+	l.setMailType(mailType);
+	l.setTimeSubmitted();
+	l.setDateSubmitted();
+	l.setYearSubmitted();
+
+	logRepository.save(l);
 
         // sends confirmation e-mail to applicant after application data is sent to the db
         // TODO notificationService.emailApplicant(a);
