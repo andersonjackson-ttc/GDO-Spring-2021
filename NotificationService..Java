@@ -3,6 +3,7 @@ package com.girlsdayout.applicationform.service;
 import com.girlsdayout.applicationform.model.Admin;
 import com.girlsdayout.applicationform.model.Applicant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,12 +16,15 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 @Service
 public class NotificationService {
+
+    @Value("${spring.EMAIL_CONTENT_FILE_PATH}")
+    private String EMAIL_CONTENT_FILE_PATH;
 
     //creating javaMailSender object
     @Autowired
@@ -43,14 +47,52 @@ public class NotificationService {
         //setting the email subject
         helper.setSubject("Girls Day Out 2020 Application Verification");
 
-        //setting the email body
-        helper.setText("Hello " + a.getfName() + ",\n\n" +
-                "Thank you for your application for the 2020 summer camp Girls Day Out!\n" +
-                "Your Record ID is: " + a.getRecordId() +
-                "\n You may also view your application status here: localhost:8080/application/status/" +
-                a.getRecordId() +
-                "\n Please visit this link to submit your waivers if you haven't already " +
-                "done so: localhost:8080/waiver/" + a.getRecordId() + "\n\n");
+        // Initializing emailSubject and emailBody string
+        String emailSubject = "";
+        String emailBody = "";
+
+        /*
+         * Try/Catch method that will read the file.
+         * First line gets assigned to emailSubject.
+         * Second line and on gets assigned to emailBody.
+         */
+        try{
+            StringBuilder str = new StringBuilder();
+            File emailFile = new File(EMAIL_CONTENT_FILE_PATH);
+            Scanner emailFileReader = new Scanner(emailFile);
+            // if file has content, assign first line to subject
+            if (emailFileReader.hasNextLine()) {
+                emailSubject = emailFileReader.nextLine();
+            }
+            //while there are still lines to be read, append to stringbuilder for emailBody
+            while (emailFileReader.hasNextLine()) {
+                str.append(emailFileReader.nextLine());
+                str.append("\n");
+            }
+            // stringBuilder assigned to emailBody
+            emailBody = str.toString();
+        } catch (FileNotFoundException e) {
+            System.out.println("There was an error finding the email body file.");
+            e.printStackTrace();
+        }
+
+        // removing SUBJECT annotation
+        emailSubject = emailSubject.replaceAll("<SUBJECT>", "");
+
+        // removing BODY annotation
+        emailBody = emailBody.replaceAll("<BODY>", "");
+
+        //replacing FIRSTNAME with applicant's first name
+        emailBody = emailBody.replaceAll("<FIRSTNAME>", a.getfName());
+
+        //replacing RECORDID with applicant's record id
+        emailBody = emailBody.replaceAll("<RECORDID>", a.getRecordId());
+
+        //setting the email subject
+        helper.setSubject(emailSubject);
+
+        //setting the email body with emailBody variable
+        helper.setText(emailBody);
 
         //creating new attachment objects
         FileSystemResource boschWaiver = new FileSystemResource(new File("src/main/resources/static/boschWaiver.pdf"));
@@ -127,74 +169,11 @@ public class NotificationService {
         //sending the mail object
         javaMailSender.send(mail);
     }
-
-    public void cancellationEmail(String studentName, String parentName, String email, String message){
-
-	//creating a timestamp of the current date and time
-	LocalDateTime dateTime = LocalDateTime.now();
-
-	//formatting the date and time
-	DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("MM-dd-yyyy HH:mm");
-	String formattedDateTime = dateTime.format(dateTimeFormat);
-
-	//parent email address that is receiving the cancellation notification
-	String toAddress = email;
-
-    //email address that is receiving the cancellation form messages, assigned to toAdminAddress
-    String toAdminAddress = "gdosummercamp@gmail.com";
-
-    //creating new simplemailmessage object
-    SimpleMailMessage mail = new SimpleMailMessage();
-
-	//creating new admin simplemailmessage object
-	SimpleMailMessage adminMail = new SimpleMailMessage();
-
-    //setting the "To" field of parent email
-    mail.setTo(toAddress);
-
-    //setting the subject field of parent email
-    mail.setSubject("Girl's Day Out Cancellation");
-
-	//setting the text field of parent email
-	mail.setText("A request for the cancellation of " + studentName + "'s application to Girls Day out has been made on " + formattedDateTime + 
-		".\nIf the cancellation request was not made by you or you wish to revoke your request, please message us through our website" +
-		"\nwithin 48 hours of receiving this email." + 
-		"\n\n**** THIS IS AN AUTOMATED MESSAGE PLEASE DO NOT REPLY TO THIS EMAIL ****");
-
-	//setting the "To" field of the admin email
-	adminMail.setTo(toAdminAddress);
-
-	//setting the subject field of admin email
-	adminMail.setSubject("Girls Day Out Cancellation");
-
-    //setting the text field of admin email
-    adminMail.setText("A new message has been sent through the Cancellation page on the GDO website. Please view the message below:\n\n" +
-         "Student's Name: " + studentName + "\nParent's Name:" + parentName + "\nE-Mail Address: " + email + "\n\nMessage: " + message + "\n\nat:" + formattedDateTime +
-         "\n\n**** THIS IS AN AUTOMATED MESSAGE PLEASE DO NOT REPLY TO THIS EMAIL ****");
-
-    //sending the mail object
-    javaMailSender.send(mail);
-
-	//sending the adminMail object
-	javaMailSender.send(adminMail);
-    }
-
-    public void emailApprovedApplicant(Applicant a) throws MessagingException {
-
-        //creating a new email object
-        MimeMessage mail = javaMailSender.createMimeMessage();
-
-        //creating helper object needed to add to/from/content/attachments to e-mail
-        MimeMessageHelper helper = new MimeMessageHelper(mail, true);
-
-        //setting the email subject
-        helper.setSubject("Your Girls Day Out 2021 Application Decision is Ready!");
-
-        //setting the email body
-        helper.setText("Hello " + a.getfName() + ",\n\n" +
-                "To view your Girls Day Out 2021 application decision, " +
-                "log in to your application portal here: localhost:8080/application/status/" +
-                "\n\n If you need anything at all, just let us know." +
-                "\nAnd thank you, " + a.getfName() + ", for applying to the Girls Day Out 2021!" + "\n\n");
+    public void missingRequisite(Applicant a) {
+    	ArrayList<Applicant> applicants = new ArrayList<Applicant>();
+    	for(Applicant app: applicants)
+    	{
+    	
+    	}
     }
 }
