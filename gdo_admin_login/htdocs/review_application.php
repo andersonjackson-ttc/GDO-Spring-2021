@@ -237,12 +237,6 @@ if (mysqli_num_rows($r) == 1)
                             <label class="form-control-plaintext" style="color: #356f94; font-style: italic;" id="dob">'. @$row['date_of_birth'] .'</label>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="phone" class=" col-sm-4 col-form-label">Phone #: </label>
-                        <div class="col-sm-8">
-                            <label class="form-control-plaintext" style="color: #356f94; font-style: italic;" id="phone">'. @$row['phone_number'] .'</label>
-                        </div>
-                    </div>
  
                 </article>
                 <article class="col-lg-6 col-md-6 col-sm-12 col-xs-12">

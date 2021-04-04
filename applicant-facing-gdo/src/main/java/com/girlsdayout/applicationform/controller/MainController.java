@@ -40,7 +40,7 @@ public class MainController {
     public String addNewApplicant (@RequestParam String lName, @RequestParam String fName,
                                         @RequestParam String address, @RequestParam String city,
                                         @RequestParam String state, @RequestParam String zipCode,
-                                        @RequestParam String phoneNumber, @RequestParam String dateOfBirth,
+                                        @RequestParam String dateOfBirth,
                                         @RequestParam String email, @RequestParam(value = "checkbox[]", required = false)int[] checkboxValue,
                                         @RequestParam String allergies, @RequestParam String medications,
                                         @RequestParam(required = false) String parentsCollege, @RequestParam(required = false) String militaryRelatives,
@@ -73,7 +73,7 @@ public class MainController {
         a.setCity(city);
         a.setState(state);
         a.setZipCode(zipCode);
-        a.setPhoneNumber(phoneNumber);
+        //a.setPhoneNumber(phoneNumber);
         a.setDateOfBirth(dateOfBirth);
         a.setAge(dateOfBirth);
         a.setAllergies(allergies);

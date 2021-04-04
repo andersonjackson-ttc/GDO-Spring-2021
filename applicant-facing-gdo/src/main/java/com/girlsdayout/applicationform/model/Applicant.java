@@ -45,8 +45,8 @@ public class Applicant {
     @Column(name = "Zip_Code")
     private String zipCode;
 
-    @Column(name = "Phone_Number")
-    private String phoneNumber;
+    //@Column(name = "Phone_Number")
+    //private String phoneNumber;
 
     @Column(name = "Date_Of_Birth")
     private String dateOfBirth;
@@ -261,13 +261,13 @@ public class Applicant {
         this.zipCode = zipCode;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
+    //public String getPhoneNumber() {
+    //    return phoneNumber;
+    //}
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
+    //public void setPhoneNumber(String phoneNumber) {
+    //    this.phoneNumber = phoneNumber;
+    //}
 
     public String getDateOfBirth() {
         return dateOfBirth;
