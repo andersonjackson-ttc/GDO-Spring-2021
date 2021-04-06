@@ -101,7 +101,7 @@ else
 
 	if($_POST['query'] == 'everything')
 	{
-		$q = "SELECT `a`.`last_name` AS 'Last Name', `a`.`first_name` AS 'First Name',`a`.`address` AS 'Address',`a`.`city` AS 'City',`a`.`state` AS 'State',`a`.`zip_code` AS 'Zip Code',`a`.`phone_number` AS 'Phone Number',`a`.`date_of_birth` AS 'DOB',`a`.`age` AS 'Age', `a`.`email` AS 'Email Address',`a`.`school_attending_in_fall` AS 'School', `a`.`college_of_interest` AS 'College of Interest', `a`.`shirt_size` AS 'T-Shirt Size',`p`.`primary_parent_first_name` AS 'Parent First Name', `p`.`primary_parent_last_name` AS 'Parent Last Name', `p`.`primary_parent_email` AS 'Parent Email', `p`.`primary_parent_address` AS 'Parent Address', `p`.`primary_parent_primary_phone` AS 'Parent Phone Number', `e`.`contact_name` AS 'Emergency Contact Name',`e`.`contact_relationship` AS 'Relationship to Child', `e`.`contact_address` AS 'Emergency Contact Address', `e`.`contact_primary_phone` AS 'Emergency Contact Phone', `a`.`allergies` AS 'Food Allergies'
+		$q = "SELECT `a`.`last_name` AS 'Last Name', `a`.`first_name` AS 'First Name',`a`.`address` AS 'Address',`a`.`city` AS 'City',`a`.`state` AS 'State',`a`.`zip_code` AS 'Zip Code',`a`.`date_of_birth` AS 'DOB',`a`.`age` AS 'Age', `a`.`email` AS 'Email Address',`a`.`school_attending_in_fall` AS 'School', `a`.`college_of_interest` AS 'College of Interest', `a`.`shirt_size` AS 'T-Shirt Size',`p`.`primary_parent_first_name` AS 'Parent First Name', `p`.`primary_parent_last_name` AS 'Parent Last Name', `p`.`primary_parent_email` AS 'Parent Email', `p`.`primary_parent_address` AS 'Parent Address', `p`.`primary_parent_primary_phone` AS 'Parent Phone Number', `e`.`contact_name` AS 'Emergency Contact Name',`e`.`contact_relationship` AS 'Relationship to Child', `e`.`contact_address` AS 'Emergency Contact Address', `e`.`contact_primary_phone` AS 'Emergency Contact Phone', `a`.`allergies` AS 'Food Allergies'
 			FROM `applicant` AS `a` 
 			LEFT JOIN `emergency_contact` AS `e` ON `e`.`id` = `a`.`id` 
 			LEFT JOIN `parent` AS `p` ON `p`.`id` = `a`.`id` $order_by LIMIT $start, $display";
@@ -109,7 +109,7 @@ else
 	}
 	elseif($_POST['query'] == 'basic')
 	{
-		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name',address AS 'Address',city AS 'City',state AS 'State',zip_code AS 'Zip Code',phone_number AS 'Phone Number',date_of_birth AS 'DOB',rising_grade_level AS 'Rising Grade Level' FROM applicant $order_by LIMIT $start, $display";
+		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name',address AS 'Address',city AS 'City',state AS 'State',zip_code AS 'Zip Code',date_of_birth AS 'DOB',rising_grade_level AS 'Rising Grade Level' FROM applicant $order_by LIMIT $start, $display";
 	}
 	elseif($_POST['query'] == 'groups')
 	{
@@ -117,12 +117,12 @@ else
 	}
 	elseif($_POST['query'] == 'contactInfo')
 	{
-		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name', phone_number AS 'Phone Number' FROM applicant $order_by LIMIT $start, $display";
+		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name' FROM applicant $order_by LIMIT $start, $display";
 	//add the querys for parent or emergency contact info
 	}
 	elseif($_POST['query'] == 'adminLogs')
 	{
-		$q = "SELECT id AS 'ID', type AS 'Type', changed_to AS 'Changed to', changed_from AS 'Changed from', mail_type AS 'Mail type', time_submitted AS 'Time', date_submitted AS 'Date', year_submitted AS 'Year' FROM log $order_by LIMIT $start, $display";
+		$q = "SELECT l.id AS 'ID', CONCAT(a.first_name, ' ', a.last_name) AS 'Applicant Name', a.email AS 'Applicant Email', CONCAT(p.primary_parent_first_name, ' ', p.primary_parent_last_name) AS 'Primary Parent Name', p.primary_parent_email AS 'Primary Parent Email', l.type AS 'Type', l.changed_to AS 'Changed to', l.changed_from AS 'Changed from', l.mail_type AS 'Mail type', l.time_submitted AS 'Time', l.date_submitted AS 'Date', l.year_submitted AS 'Year' FROM log l JOIN applicant a ON l.id = a.id JOIN parent p ON a.id = p.id $order_by LIMIT $start, $display";
 	}
 	else
 	{
