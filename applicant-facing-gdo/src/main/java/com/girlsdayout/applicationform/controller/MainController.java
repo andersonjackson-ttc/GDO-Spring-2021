@@ -188,6 +188,8 @@ public class MainController {
 	//writes the sending of an application email to the log
 	Log l = new Log();
 	l.setId(a.getId());
+	String changedBy = "System(Automatic)";
+	l.setChangedBy(changedBy);
 	String typeEmail = "Email";
 	l.setType(typeEmail);
 	String mailType = "Application";

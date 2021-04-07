@@ -32,6 +32,7 @@ DROP TABLE IF EXISTS `log`;
 CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) COLLATE utf8_unicode_ci NOT NULL,
   `type` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `changed_by` varchar(55) COLLATE utf8_unicode_ci NULL,
   `changed_to` varchar(15) COLLATE utf8_unicode_ci NULL,
   `changed_from` varchar(15) COLLATE utf8_unicode_ci NULL,
   `mail_type` varchar(15) COLLATE utf8_unicode_ci NULL,

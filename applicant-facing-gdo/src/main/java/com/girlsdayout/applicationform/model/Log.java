@@ -27,6 +27,9 @@ public class Log {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "changed_by")
+    private String changedBy;
+
     @Column(name = "changed_to")
     private String changedTo;
 
@@ -51,6 +54,8 @@ public class Log {
 
     public String getType() { return type; }
 
+    public String getChangedBy() { return changedBy; }
+
     public String getChangedTo() { return changedTo; }
 
     public String getChangedFrom() { return changedFrom; }
@@ -69,6 +74,10 @@ public class Log {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public void setChangedBy(String changedBy) {
+        this.changedBy = changedBy;
     }
 
     public void setChangedTo(String changedTo) {
