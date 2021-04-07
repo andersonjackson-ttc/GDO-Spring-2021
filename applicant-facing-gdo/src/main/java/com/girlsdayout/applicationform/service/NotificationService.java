@@ -198,3 +198,26 @@ public class NotificationService {
                 "\nAnd thank you, " + a.getfName() + ", for applying to the Girls Day Out 2021!" + "\n\n");
     }
 }
+ public void missingRequisiteWaivers(Applicant a, String name){
+    	String blank = "";
+    	String toAddress = a.getPriParentEMail();
+    	SimpleMailMessage mail = new SimpleMailMessage();
+    	mail.setTo(toAddress);
+    	mail.setSubject("Missing waivers");
+    	if(a.getBoschWaiver() == blank)
+    	{
+    		mail.setText(name+", you are missing the Bosch Waiver, please fill it out for resubmission");
+    	}
+    	if(a.getConsentWaiver() == blank)
+    	{
+    		mail.setText(name+", you are missing the Consent Waiver, please fill it out for resubmission");
+    	}
+    	if(a.getCofcWaiver() == blank)
+    	{
+    		mail.setText(name+", you are missing the Cofc Waiver, please fill it out for resubmission");
+    	}
+    	javaMailSender.send(mail);
+        		
+    }
+}
+
