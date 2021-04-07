@@ -536,6 +536,13 @@ if (mysqli_num_rows($r) == 1)
                         echo 'hidden';
                     }
                     echo' >Pending</option>
+
+                    <option value="Cancelled"';
+                    if($status == "Cancelled" )
+                    { 
+                        echo 'hidden';
+                    }
+                    echo' >Cancelled</option>
          
                 </select>
             </div>
