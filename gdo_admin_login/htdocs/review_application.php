@@ -83,6 +83,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $q = "UPDATE applicant SET application_status='$update', denied_reason='$deny' WHERE id=$id";
             }
         }
+
+        if ($update == "Cancelled") {
+            $m = mysqli_query($dbc, "SELECT email FROM applicant WHERE id=$id");
+            $mail = mysqli_fetch_assoc($m);
+            $studentemail = $mail['email'];
+            $mailsubject = "Your Girl's Day Out 2021 application has been cancelled";
+            $mailcontents = "Your application to Girl's Day Out 2021 has been cancelled by an administrator. If you believe this cancellation has been an error, please contact us through the website from the Contact Us page.";
+            mail($studentemail,$mailsubject,$mailcontents);
+        }
         
         
         if(mysqli_query ($dbc, $q))
