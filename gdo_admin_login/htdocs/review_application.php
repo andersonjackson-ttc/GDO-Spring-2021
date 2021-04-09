@@ -35,7 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if (isset($_POST['update'])) 
     {
+        $pq = mysqli_query($dbc, "SELECT application_status AS app_status FROM applicant WHERE id=$id");
+        $prevStatusArray = mysqli_fetch_assoc($pq);
+        $prevStatus = $prevStatusArray['app_status'];
         $update = mysqli_real_escape_string($dbc, $_POST['update']);
+        date_default_timezone_set("America/New_York");
+        $logDate = date("m/d");
+        $logTime = date("H:i");
+        $logYear = date("Y");
     } 
     else 
     {
@@ -91,6 +98,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mailsubject = "Your Girl's Day Out 2021 application has been cancelled";
             $mailcontents = "Your application to Girl's Day Out 2021 has been cancelled by an administrator. If you believe this cancellation has been an error, please contact us through the website from the Contact Us page.";
             mail($studentemail,$mailsubject,$mailcontents);
+            $log = "INSERT INTO log (id, type, changed_by, changed_to, changed_from, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'status', 'Admin', '$update', '$prevStatus', '$logTime', '$logDate', '$logYear')";
+            if(mysqli_query($dbc, $log)){
+
+            }
+            else{
+                echo 'log not submitted';
+            }
+
         }
         
         
