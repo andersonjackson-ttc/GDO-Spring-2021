@@ -38,8 +38,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `mail_type` varchar(15) COLLATE utf8_unicode_ci NULL,
   `time_submitted` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `date_submitted` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
-  `year_submitted` int(4) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
+  `year_submitted` int(4) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
