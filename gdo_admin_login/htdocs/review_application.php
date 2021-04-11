@@ -129,6 +129,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
         }
+         if ($update == "Approved") {
+            $m = mysqli_query($dbc, "SELECT email FROM applicant WHERE id=$id");
+            $mail = mysqli_fetch_assoc($m);
+            $studentemail = $mail['email'];
+            $mailsubject = "Your Girl's Day Out 2021 application has been approved";
+            $mailcontents = "Your application to Girl's Day Out 2021 has been approved by an administrator. Congratulation We appreciate your interest in Girl's Day Out.";
+            mail($studentemail,$mailsubject,$mailcontents);
+            $log = "INSERT INTO log (id, type, changed_by, changed_to, changed_from, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'status', 'Admin', '$update', '$prevStatus', '$logTime', '$logDate', '$logYear')";
+            if(mysqli_query($dbc, $log)){
+
+            }
+            else{
+                echo 'log not submitted';
+            }
+
+        }
         
         
         if(mysqli_query ($dbc, $q))
