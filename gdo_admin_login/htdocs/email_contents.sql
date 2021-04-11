@@ -35,6 +35,12 @@ CREATE TABLE IF NOT EXISTS `emails` (
   `contents` varchar(1000) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Dumping data for table `emails`
+--
+INSERT INTO admin_login.emails VALUES ('Approved', 'An update to your status', 'Congratulations, Your application as been approved!'),('Denied', 'An update to your status', 'Your application has been denied.'),('Pending', 'An update to your status', 'Your application is currently pending for review.'),('Cancelled', 'An update to your status', 'Your application has been cancelled. If you think this is a mistake, please contact us.');
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
