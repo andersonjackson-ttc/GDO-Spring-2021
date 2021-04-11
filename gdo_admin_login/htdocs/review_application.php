@@ -197,11 +197,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $mailcontents = "Your application has moved from the wait list, and is now awaiting review by our approval staff.\n If you have any questions regarding this email, please contact us on the Girl's Day Out website contact page.";
                     if (mail($studentemail,$mailsubject,$mailcontents))
                     {
-                        echo 'An email has been sent to ', $studentemail;
+                        
                     }
                     else
                     {
                         echo 'Email failed to send to ', $studentemail;
+                    }
+                    $log = "INSERT INTO log (id, type, changed_by, changed_to, changed_from, time_submitted, date_submitted, year_submitted) VALUES ('$rnext', 'status', 'Admin', 'Pending', 'Waitlist', '$logTime', '$logDate', '$logYear')";
+                    if(mysqli_query($dbc, $log)){
+
+                    }
+                    else{
+                        echo 'log not submitted';
                     }
                 }
             }
