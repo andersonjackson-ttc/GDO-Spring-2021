@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $prevStatus = $prevStatusArray['app_status'];
         $update = mysqli_real_escape_string($dbc, $_POST['update']);
         date_default_timezone_set("America/New_York");
-        $logDate = date("m/d");
+        $logDate = date("m-d");
         $logTime = date("H:i");
         $logYear = date("Y");
     } 

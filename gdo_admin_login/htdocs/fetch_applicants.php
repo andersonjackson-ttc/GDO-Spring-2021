@@ -122,7 +122,7 @@ else
 	}
 	elseif($_POST['query'] == 'adminLogs')
 	{
-		$q = "SELECT a.record_id AS 'Applicant ID', CONCAT(a.first_name, ' ', a.last_name) AS 'Applicant Name', CONCAT(p.primary_parent_first_name, ' ', p.primary_parent_last_name) AS 'Primary Parent Name', p.primary_parent_email AS 'Primary Parent Email', l.type AS 'Type', l.changed_by AS 'Changed by', l.changed_to AS 'Changed to', l.changed_from AS 'Changed from', l.mail_type AS 'Mail type', l.time_submitted AS 'Time', l.date_submitted AS 'Date', l.year_submitted AS 'Year' FROM log l JOIN applicant a ON l.id = a.id JOIN parent p ON a.id = p.id $order_by LIMIT $start, $display";
+		$q = "SELECT a.record_id AS 'Applicant ID', CONCAT(a.first_name, ' ', a.last_name) AS 'Applicant Name', CONCAT(p.primary_parent_first_name, ' ', p.primary_parent_last_name) AS 'Primary Parent Name', p.primary_parent_email AS 'Primary Parent Email', l.type AS 'Type', l.changed_by AS 'Changed by', l.changed_to AS 'Changed to', l.changed_from AS 'Changed from', l.mail_type AS 'Mail type', l.time_submitted AS 'Time', l.date_submitted AS 'Date', l.year_submitted AS 'Year' FROM log l JOIN applicant a ON l.id = a.id JOIN parent p ON a.id = p.id ORDER BY l.year_submitted DESC, l.date_submitted DESC, l.time_submitted DESC LIMIT $start, $display";
 	}
 	else
 	{
