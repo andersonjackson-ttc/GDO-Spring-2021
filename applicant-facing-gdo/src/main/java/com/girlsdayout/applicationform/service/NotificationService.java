@@ -197,6 +197,34 @@ public class NotificationService {
                 "\n\n If you need anything at all, just let us know." +
                 "\nAnd thank you, " + a.getfName() + ", for applying to the Girls Day Out 2021!" + "\n\n");
     }
+    public void notifyApprover(Iterable<Admin> allAdmins, String type, Applicant app)
+    {
+    	 ArrayList<Admin> approvers = new ArrayList<Admin>();
+
+         for (Admin a : allAdmins){
+             if (a.getJob().toUpperCase().equals("APPROVER")){
+                 approvers.add(a);
+             }
+         }
+         MimeMessage message = javaMailSender.createMimeMessage();
+
+
+         for (Admin a : approvers){
+             Address to = new InternetAddress(a.getEmail());
+             message.addRecipient(Message.RecipientType.TO, to);
+         }
+
+          //setting the email sender in the mail object
+          message.setFrom("GDOTestEmail@gmail.com");
+
+         if (type.equals("application")){
+             //setting the email subject
+             message.setSubject("New Applicant");
+
+             message.setText("A new applicant has been created for " + app.getfName() + " " + app.getlName() + ".");
+         }
+         javaMailSender.send(mail);
+    }
 
  public void missingRequisiteWaivers(Applicant a, String name){
     	String blank = "";
