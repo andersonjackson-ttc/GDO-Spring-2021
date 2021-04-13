@@ -197,7 +197,7 @@ public class NotificationService {
                 "\n\n If you need anything at all, just let us know." +
                 "\nAnd thank you, " + a.getfName() + ", for applying to the Girls Day Out 2021!" + "\n\n");
     }
-}
+
  public void missingRequisiteWaivers(Applicant a, String name){
     	String blank = "";
     	String toAddress = a.getPriParentEMail();
