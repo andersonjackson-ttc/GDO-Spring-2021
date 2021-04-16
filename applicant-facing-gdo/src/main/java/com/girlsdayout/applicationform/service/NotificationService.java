@@ -197,4 +197,55 @@ public class NotificationService {
                 "\n\n If you need anything at all, just let us know." +
                 "\nAnd thank you, " + a.getfName() + ", for applying to the Girls Day Out 2021!" + "\n\n");
     }
+    public void notifyApprover(Iterable<Admin> allAdmins, String type, Applicant app)
+    {
+    	 ArrayList<Admin> approvers = new ArrayList<Admin>();
+
+         for (Admin a : allAdmins){
+             if (a.getJob().toUpperCase().equals("APPROVER")){
+                 approvers.add(a);
+             }
+         }
+         MimeMessage message = javaMailSender.createMimeMessage();
+
+
+         for (Admin a : approvers){
+             Address to = new InternetAddress(a.getEmail());
+             message.addRecipient(Message.RecipientType.TO, to);
+         }
+
+          //setting the email sender in the mail object
+          message.setFrom("GDOTestEmail@gmail.com");
+
+         if (type.equals("application")){
+             //setting the email subject
+             message.setSubject("New Applicant");
+
+             message.setText("A new applicant has been created for " + app.getfName() + " " + app.getlName() + ".");
+         }
+         javaMailSender.send(mail);
+    }
+
+ public void missingRequisiteWaivers(Applicant a, String name){
+    	String blank = "";
+    	String toAddress = a.getPriParentEMail();
+    	SimpleMailMessage mail = new SimpleMailMessage();
+    	mail.setTo(toAddress);
+    	mail.setSubject("Missing waivers");
+    	if(a.getBoschWaiver() == blank)
+    	{
+    		mail.setText(name+", you are missing the Bosch Waiver, please fill it out for resubmission");
+    	}
+    	if(a.getConsentWaiver() == blank)
+    	{
+    		mail.setText(name+", you are missing the Consent Waiver, please fill it out for resubmission");
+    	}
+    	if(a.getCofcWaiver() == blank)
+    	{
+    		mail.setText(name+", you are missing the Cofc Waiver, please fill it out for resubmission");
+    	}
+    	javaMailSender.send(mail);
+        		
+    }
 }
+

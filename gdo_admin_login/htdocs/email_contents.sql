@@ -25,21 +25,21 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `log`
+-- Table structure for table `emails`
 --
 
-DROP TABLE IF EXISTS `log`;
-CREATE TABLE IF NOT EXISTS `log` (
-  `id` int(11) COLLATE utf8_unicode_ci NOT NULL,
+DROP TABLE IF EXISTS `emails`;
+CREATE TABLE IF NOT EXISTS `emails` (
   `type` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `changed_by` varchar(55) COLLATE utf8_unicode_ci NULL,
-  `changed_to` varchar(15) COLLATE utf8_unicode_ci NULL,
-  `changed_from` varchar(15) COLLATE utf8_unicode_ci NULL,
-  `mail_type` varchar(15) COLLATE utf8_unicode_ci NULL,
-  `time_submitted` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
-  `date_submitted` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
-  `year_submitted` int(4) COLLATE utf8_unicode_ci NOT NULL
+  `subject` varchar(200) COLLATE utf8_unicode_ci NOT NULL,
+  `contents` varchar(1000) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `emails`
+--
+INSERT INTO admin_login.emails VALUES ('Approved', 'An update to your status', 'Congratulations, Your application as been approved!'),('Denied', 'An update to your status', 'Your application has been denied.'),('Pending', 'An update to your status', 'Your application is currently pending for review.'),('Cancelled', 'An update to your status', 'Your application has been cancelled. If you think this is a mistake, please contact us.');
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

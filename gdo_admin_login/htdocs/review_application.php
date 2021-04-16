@@ -35,7 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     if (isset($_POST['update'])) 
     {
+        $pq = mysqli_query($dbc, "SELECT application_status AS app_status FROM applicant WHERE id=$id");
+        $prevStatusArray = mysqli_fetch_assoc($pq);
+        $prevStatus = $prevStatusArray['app_status'];
         $update = mysqli_real_escape_string($dbc, $_POST['update']);
+        date_default_timezone_set("America/New_York");
+        $logDate = date("m-d");
+        $logTime = date("H:i");
+        $logYear = date("Y");
     } 
     else 
     {
@@ -82,6 +89,79 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             {
                 $q = "UPDATE applicant SET application_status='$update', denied_reason='$deny' WHERE id=$id";
             }
+        }
+
+        if ($update == "Cancelled") {
+            $m = mysqli_query($dbc, "SELECT email FROM applicant WHERE id=$id");
+            $mail = mysqli_fetch_assoc($m);
+            $studentemail = $mail['email'];
+            $subj = mysqli_query($dbc, "SELECT subject FROM emails WHERE type='$update'");
+            $subjectline = mysqli_fetch_assoc($subj);
+            $mailsubject = $subjectline['subject'];
+            $cont = mysqli_query($dbc, "SELECT contents FROM emails WHERE type='$update'");
+            $contentline = mysqli_fetch_assoc($cont);
+            $mailcontents = $contentline['contents'];
+            // $mailsubject = "Your Girl's Day Out 2021 application has been cancelled";
+            // $mailcontents = "Your application to Girl's Day Out 2021 has been cancelled by an administrator. If you believe this cancellation has been an error, please contact us through the website from the Contact Us page.";
+            mail($studentemail,$mailsubject,$mailcontents);
+            $log = "INSERT INTO log (id, type, changed_by, changed_to, changed_from, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'status', 'Admin', '$update', '$prevStatus', '$logTime', '$logDate', '$logYear')";
+            if(mysqli_query($dbc, $log)){
+
+            }
+            else{
+                echo 'log not submitted';
+            }
+
+        }
+
+        if ($update == "Denied") {
+            $m = mysqli_query($dbc, "SELECT email FROM applicant WHERE id=$id");
+            $mail = mysqli_fetch_assoc($m);
+            $studentemail = $mail['email'];
+            $subj = mysqli_query($dbc, "SELECT subject FROM emails WHERE type='$update'");
+            $subjectline = mysqli_fetch_assoc($subj);
+            $mailsubject = $subjectline['subject'];
+            $cont = mysqli_query($dbc, "SELECT contents FROM emails WHERE type='$update'");
+            $contentline = mysqli_fetch_assoc($cont);
+            $mailcontents = $contentline['contents'];
+            // $mailsubject = "Your Girl's Day Out 2021 application has been denied";
+            if ($deny != null) {
+                $mailcontents .= "\nReason for denial: $deny";
+            }
+            else{
+                // $mailcontents = "Your application to Girl's Day Out 2021 has been denied by an administrator. We appreciate your interest in Girl's Day Out.";
+            }
+            mail($studentemail,$mailsubject,$mailcontents);
+            $log = "INSERT INTO log (id, type, changed_by, changed_to, changed_from, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'status', 'Admin', '$update', '$prevStatus', '$logTime', '$logDate', '$logYear')";
+            if(mysqli_query($dbc, $log)){
+
+            }
+            else{
+                echo 'log not submitted';
+            }
+
+        }
+         if ($update == "Approved") {
+            $m = mysqli_query($dbc, "SELECT email FROM applicant WHERE id=$id");
+            $mail = mysqli_fetch_assoc($m);
+            $studentemail = $mail['email'];
+            $subj = mysqli_query($dbc, "SELECT subject FROM emails WHERE type='$update'");
+            $subjectline = mysqli_fetch_assoc($subj);
+            $mailsubject = $subjectline['subject'];
+            $cont = mysqli_query($dbc, "SELECT contents FROM emails WHERE type='$update'");
+            $contentline = mysqli_fetch_assoc($cont);
+            $mailcontents = $contentline['contents'];
+            // $mailsubject = "Your Girl's Day Out 2021 application has been approved";
+            // $mailcontents = "Your application to Girl's Day Out 2021 has been approved by an administrator. Congratulation We appreciate your interest in Girl's Day Out.";
+            mail($studentemail,$mailsubject,$mailcontents);
+            $log = "INSERT INTO log (id, type, changed_by, changed_to, changed_from, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'status', 'Admin', '$update', '$prevStatus', '$logTime', '$logDate', '$logYear')";
+            if(mysqli_query($dbc, $log)){
+
+            }
+            else{
+                echo 'log not submitted';
+            }
+
         }
         
         
@@ -131,15 +211,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $m = mysqli_query($dbc, "SELECT email FROM applicant WHERE id=$rnext");
                     $mail = mysqli_fetch_assoc($m);
                     $studentemail = $mail['email'];
-                    $mailsubject = "An update to your Girl's Day Out $year application status";
-                    $mailcontents = "Your application has moved from the wait list, and is now awaiting review by our approval staff.\n If you have any questions regarding this email, please contact us on the Girl's Day Out website contact page.";
+                    $subj = mysqli_query($dbc, "SELECT subject FROM emails WHERE type='Pending'");
+                    $subjectline = mysqli_fetch_assoc($subj);
+                    $mailsubject = $subjectline['subject'];
+                    $cont = mysqli_query($dbc, "SELECT contents FROM emails WHERE type='Pending'");
+                    $contentline = mysqli_fetch_assoc($cont);
+                    $mailcontents = $contentline['contents'];
+                    // $mailsubject = "An update to your Girl's Day Out $year application status";
+                    // $mailcontents = "Your application has moved from the wait list, and is now awaiting review by our approval staff.\n If you have any questions regarding this email, please contact us on the Girl's Day Out website contact page.";
                     if (mail($studentemail,$mailsubject,$mailcontents))
                     {
-                        echo 'An email has been sent to ', $studentemail;
+                        
                     }
                     else
                     {
                         echo 'Email failed to send to ', $studentemail;
+                    }
+                    $log = "INSERT INTO log (id, type, changed_by, changed_to, changed_from, time_submitted, date_submitted, year_submitted) VALUES ('$rnext', 'status', 'Admin', 'Pending', 'Waitlist', '$logTime', '$logDate', '$logYear')";
+                    if(mysqli_query($dbc, $log)){
+
+                    }
+                    else{
+                        echo 'log not submitted';
                     }
                 }
             }
@@ -235,12 +328,6 @@ if (mysqli_num_rows($r) == 1)
                         <label for="dob" class=" col-sm-4 col-form-label">Date of Birth: </label>
                         <div class="col-sm-8">
                             <label class="form-control-plaintext" style="color: #356f94; font-style: italic;" id="dob">'. @$row['date_of_birth'] .'</label>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="phone" class=" col-sm-4 col-form-label">Phone #: </label>
-                        <div class="col-sm-8">
-                            <label class="form-control-plaintext" style="color: #356f94; font-style: italic;" id="phone">'. @$row['phone_number'] .'</label>
                         </div>
                     </div>
  
@@ -542,6 +629,13 @@ if (mysqli_num_rows($r) == 1)
                         echo 'hidden';
                     }
                     echo' >Pending</option>
+
+                    <option value="Cancelled"';
+                    if($status == "Cancelled" )
+                    { 
+                        echo 'hidden';
+                    }
+                    echo' >Cancelled</option>
          
                 </select>
             </div>

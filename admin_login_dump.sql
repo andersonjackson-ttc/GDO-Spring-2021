@@ -58,7 +58,6 @@ CREATE TABLE `applicant` (
   `relatives_military_branch` varchar(255) DEFAULT NULL,
   `relatives_in_military` varchar(255) DEFAULT NULL,
   `parents_college` varchar(255) DEFAULT NULL,
-  `phone_number` varchar(255) DEFAULT NULL,
   `record_id` varchar(255) DEFAULT NULL,
   `rising_grade_level` varchar(255) DEFAULT NULL,
   `shirt_size` varchar(255) DEFAULT NULL,

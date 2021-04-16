@@ -39,7 +39,6 @@ CREATE TABLE IF NOT EXISTS `applicant` (
   `City` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `State` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   `ZipCode` int(5) NOT NULL,
-  `PhoneNumber` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `DateOfBirth` date NOT NULL,
   `Ethnicity` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
   `Allergies` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
