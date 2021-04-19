@@ -124,6 +124,8 @@ $r = @mysqli_query ($dbc, $q); // Run the query.->
         if(!empty($_POST['subject']) && !empty($_POST['contents'])){
             $subject = $_POST['subject'];
             $contents = $_POST['contents'];
+            $subject = addslashes($subject);
+            $contents = addslashes($contents);
             $testquery = $_POST['testquery'];
             $updateEmail = mysqli_query($dbc, "UPDATE emails SET subject='$subject', contents='$contents' WHERE type='$testquery'");
             mysqli_query($dbc, $updateEmail);
