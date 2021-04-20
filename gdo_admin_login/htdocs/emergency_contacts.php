@@ -28,7 +28,7 @@
     // Fetch and print all the records:
     while ($row = mysqli_fetch_array($r, MYSQLI_ASSOC)) 
     {
-        echo '<option>' . $row['first_name'] . " " . $row['last_name'] . '</option>';
+        echo '<option>' . sort($row['last_name']) . " " . $row['first_name'] . '</option>';
     }
          
 ?>
