@@ -25,19 +25,19 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `groups`
+-- Table structure for table `group_names`
 --
 
-DROP TABLE IF EXISTS `groups`;
-CREATE TABLE IF NOT EXISTS `groups` (
+DROP TABLE IF EXISTS `group_names`;
+CREATE TABLE IF NOT EXISTS `group_names` (
   `group_name` varchar(40) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table 'groups'
+-- Dumping data for table 'group_names'
 --
 
-INSERT INTO admin_login.groups VALUES ('Super Scientists'),('Marvellous Mathematicians'),('Excited Engineers'),('Awesome Astronauts');
+INSERT INTO admin_login.group_names VALUES ('Super Scientists'),('Marvellous Mathematicians'),('Excited Engineers'),('Awesome Astronauts');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

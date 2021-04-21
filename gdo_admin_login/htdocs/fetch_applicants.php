@@ -117,7 +117,7 @@ else
 	}
 	elseif($_POST['query'] == 'contactInfo')
 	{
-		$q = "SELECT a.record_id AS 'Applicant ID', a.camp_group AS 'Group', CONCAT(a.first_name, ' ', a.last_name) AS 'Name', CONCAT(p.primary_parent_first_name, ' ', p.primary_parent_last_name) AS 'Primary Guardian', p.primary_parent_email AS 'Primary Email', p.primary_parent_primary_phone AS 'Primary Phone', CONCAT(p.alt_parent_first_name, ' ', p.alt_parent_last_name) AS 'Secondary Guardian', p.alt_parent_email AS 'Secondary Email', p.alt_parent_primary_phone AS 'Secondary Phone' FROM applicant a JOIN parent p ON a.id = p.id $order_by LIMIT $start, $display";
+		$q = "SELECT a.id AS 'Review', a.camp_group AS 'Group', CONCAT(a.first_name, ' ', a.last_name) AS 'Name', CONCAT(p.primary_parent_first_name, ' ', p.primary_parent_last_name) AS 'Primary Guardian', p.primary_parent_email AS 'Primary Email', p.primary_parent_primary_phone AS 'Primary Phone', CONCAT(p.alt_parent_first_name, ' ', p.alt_parent_last_name) AS 'Secondary Guardian', p.alt_parent_email AS 'Secondary Email', p.alt_parent_primary_phone AS 'Secondary Phone' FROM applicant a JOIN parent p ON a.id = p.id ORDER BY a.last_name ASC, a.first_name ASC LIMIT $start, $display";
 	//add the querys for parent or emergency contact info
 	}
 	elseif($_POST['query'] == 'adminLogs')
@@ -157,12 +157,34 @@ $r = @mysqli_query ($dbc, $q); // Run the query.->
 		}
 
 		echo '<tr class='.$color.'>';
-		
-		while($i < mysqli_field_count($dbc))
-		{
-			echo '<td>'.$row[$i].'</td>';
-			$i++;
+
+		if($_POST['query'] == 'contactInfo'){
+			while($i < mysqli_field_count($dbc))
+			{
+				if($i == 0){
+					echo '<td><a href="review_application.php?id=' . $row[0] . '">Review</a></td>';
+				}
+				else{
+					echo '<td>'.$row[$i].'</td>';
+				}
+				//echo '<td>'.$row[$i].'</td>';
+				$i++;
+			}
 		}
+		else{
+			while($i < mysqli_field_count($dbc))
+			{
+				/*if($i == 0){
+					echo '<td><a href="review_application.php?record_id=' . $row[0] . '">$row[0]</a></td>';
+				}
+				else{
+					echo '<td>'.$row[$i].'</td>';
+				}*/
+				echo '<td>'.$row[$i].'</td>';
+				$i++;
+			}
+		}
+		
 		echo '</tr>';
 		$x++;
 	}

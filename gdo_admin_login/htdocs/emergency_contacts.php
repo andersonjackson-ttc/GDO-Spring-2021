@@ -21,14 +21,14 @@
 
     $query = $_POST['query'];
 
-    $q = "SELECT first_name, last_name FROM applicant ORDER BY last_name ASC";   
+    $q = "SELECT first_name, last_name FROM applicant ORDER BY last_name ASC, first_name ASC";   
             
     $r = mysqli_query ($dbc, $q); 
            
     // Fetch and print all the records:
     while ($row = mysqli_fetch_array($r, MYSQLI_ASSOC)) 
     {
-        echo '<option>' . sort($row['last_name']) . " " . $row['first_name'] . '</option>';
+        echo '<option>' . $row['last_name'] . ", " . $row['first_name'] . '</option>';
     }
          
 ?>
@@ -46,7 +46,7 @@
         
         $q2 = "SELECT `applicant`.`first_name`, `emergency_contact`.*
         FROM `applicant`
-        INNER JOIN `emergency_contact` ON `applicant`.`id` = `emergency_contact`.`id` WHERE `applicant`.`first_name` LIKE  '".$fName[0] ."'" ;
+        INNER JOIN `emergency_contact` ON `applicant`.`id` = `emergency_contact`.`id` WHERE `applicant`.`first_name` LIKE  '".$fName[1] ."'" ;
 
         $_SESSION['query'] = $q2;
 

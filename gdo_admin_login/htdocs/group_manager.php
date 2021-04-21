@@ -18,7 +18,7 @@
                 <option value="none" selected disabled hidden>Select an Option</option>
 <?php
 
-    $q = "SELECT group_name FROM groups";
+    $q = "SELECT group_name FROM group_names";
             
     $r = mysqli_query($dbc, $q); 
            
