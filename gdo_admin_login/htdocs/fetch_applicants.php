@@ -29,7 +29,7 @@
 		 		<option value="groups"'; if (($_POST['query'])=='groups'){echo 'selected';} echo '>Group Assignment</option>
 		 		<option value="contactInfo"'; if (($_POST['query'])=='contactInfo'){echo 'selected';} echo '>Contact Info</option>
 		 		<option value="adminLogs"'; if (($_POST['query'])=='adminLogs'){echo 'selected';} echo '>Administrative Logs</option>
-				<option value="allergies"'; if (($_POST['query'])=='allergies'){echo 'selected';} echo '>Allergies</option>';
+				<option value="allergies"'; if (($_POST['query'])=='allergies'){echo 'selected';} echo '>Allergies and Medications</option>';
 				
 			}
 			else
@@ -38,10 +38,10 @@
 				<option value="everything">Everything</option>
 		 		<option value="groups">Group Assignment</option>
 		 		<option value="contactInfo">Contact Info</option>
-		 		<option value="adminLogs">Administrative Logs</option>';
+		 		<option value="adminLogs">Administrative Logs</option>
+		 		<option value="allergies">Allergies and Medications</option>';
 			}
 			?>
-			<option></option>
 
 	 	</select>
 	 	<button type="submit" class="btn btn-primary mb-2">Submit</button>
@@ -123,11 +123,11 @@ else
 	}
 	elseif($_POST['query'] == 'adminLogs')
 	{
-		$q = "SELECT a.record_id AS 'Applicant ID', CONCAT(a.first_name, ' ', a.last_name) AS 'Applicant Name', CONCAT(p.primary_parent_first_name, ' ', p.primary_parent_last_name) AS 'Primary Guardian Name', p.primary_parent_email AS 'Primary Guardian Email', l.type AS 'Type', l.changed_by AS 'Changed by', l.changed_to AS 'Changed to', l.changed_from AS 'Changed from', l.mail_type AS 'Mail type', l.time_submitted AS 'Time', l.date_submitted AS 'Date', l.year_submitted AS 'Year' FROM log l JOIN applicant a ON l.id = a.id JOIN parent p ON a.id = p.id ORDER BY l.year_submitted DESC, l.date_submitted DESC, l.time_submitted DESC LIMIT $start, $display";
+		$q = "SELECT a.id AS 'Review', CONCAT(a.first_name, ' ', a.last_name) AS 'Applicant Name', CONCAT(p.primary_parent_first_name, ' ', p.primary_parent_last_name) AS 'Primary Guardian Name', p.primary_parent_email AS 'Primary Guardian Email', l.type AS 'Type', l.changed_by AS 'Changed by', l.changed_to AS 'Changed to', l.changed_from AS 'Changed from', l.mail_type AS 'Mail type', l.time_submitted AS 'Time', l.date_submitted AS 'Date', l.year_submitted AS 'Year' FROM log l JOIN applicant a ON l.id = a.id JOIN parent p ON a.id = p.id ORDER BY l.year_submitted DESC, l.date_submitted DESC, l.time_submitted DESC LIMIT $start, $display";
 	}
 	elseif($_POST['query'] == 'allergies')
 	{
-		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name', camp_group AS 'Group Name', `a`.`allergies` AS 'Food Allergies', `e`.`contact_primary_phone` AS 'Emergency Contact Phone'";
+		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name', camp_group AS 'Group Name', `a`.`allergies` AS 'Food Allergies', `a`.`medications` AS 'Medications', `e`.`contact_primary_phone` AS 'Emergency Contact Phone' FROM applicant a JOIN emergency_contact e ON e.id = a.id WHERE LENGTH(a.allergies) > 0 OR LENGTH(a.medications) > 0 IS NOT NULL ORDER BY last_name ASC, first_name ASC LIMIT $start, $display";
 	}
 	else
 	{
@@ -163,7 +163,7 @@ $r = @mysqli_query ($dbc, $q); // Run the query.->
 
 		echo '<tr class='.$color.'>';
 
-		if($_POST['query'] == 'contactInfo'){
+		if($_POST['query'] == 'contactInfo' || $_POST['query'] == 'adminLogs'){
 			while($i < mysqli_field_count($dbc))
 			{
 				if($i == 0){
