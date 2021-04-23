@@ -17,23 +17,32 @@
 	 	<label for="query">Type of Email to Update</label>
 		<select name="query" class="mx-3">
 			<?php
-			if(isset($_POST["query"]))
-			{
-				echo '<option value="Approved"'; if (($_POST['query'])=='Approved'){echo 'selected';} echo '>Approved</option>
-				<option value="Pending"'; if (($_POST['query'])=='Pending'){echo 'selected';} echo '>Pending</option>
-		 		<option value="Denied"'; if (($_POST['query'])=='Denied'){echo 'selected';} echo '>Denied</option>
-		 		<option value="Cancelled"'; if (($_POST['query'])=='Cancelled'){echo 'selected';} echo '>Cancelled</option>';
+			// if(isset($_POST["query"]))
+			// {
+			// 	echo '<option value="Approved"'; if (($_POST['query'])=='Approved'){echo 'selected';} echo '>Approved</option>
+			// 	<option value="Pending"'; if (($_POST['query'])=='Pending'){echo 'selected';} echo '>Pending</option>
+		 // 		<option value="Denied"'; if (($_POST['query'])=='Denied'){echo 'selected';} echo '>Denied</option>
+		 // 		<option value="Cancelled"'; if (($_POST['query'])=='Cancelled'){echo 'selected';} echo '>Cancelled</option>';
 
-			}
-			else
-			{
-				echo '<option value="Approved">Approved</option>
-				<option value="Pending">Pending</option>
-		 		<option value="Denied">Denied</option>
-		 		<option value="Cancelled">Cancelled</option>';
-			}
+			// }
+			// else
+			// {
+			// 	echo '<option value="Approved">Approved</option>
+			// 	<option value="Pending">Pending</option>
+		 // 		<option value="Denied">Denied</option>
+		 // 		<option value="Cancelled">Cancelled</option>';
+			// }
+            $dropdownquery = "SELECT type FROM emails";
+                    
+            $dropdownrow = mysqli_query($dbc, $dropdownquery); 
+                   
+            // Fetch and print all the records:
+            while ($dropdown = mysqli_fetch_array($dropdownrow, MYSQLI_ASSOC)) 
+            {
+                echo '<option>'. @$dropdown['type'] .'</option>';
+            }
 			?>
-			<option></option>
+
 
 	 	</select>
 	 	<button type="submit" class="btn btn-primary mb-2">Submit</button>
@@ -51,31 +60,34 @@ else
 {
 	$start = 0;
 }
+    $typeholder = $_POST['query'];
+	// if($_POST['query'] == 'Approved')
+	// {
+	// 	$q = "SELECT * FROM emails WHERE type='Approved'";
 
-	if($_POST['query'] == 'Approved')
-	{
-		$q = "SELECT * FROM emails WHERE type='Approved'";
+	// }
+	// elseif($_POST['query'] == 'Denied')
+ //    {
+ //        $q = "SELECT * FROM emails WHERE type='Denied'";
 
-	}
-	elseif($_POST['query'] == 'Denied')
-    {
-        $q = "SELECT * FROM emails WHERE type='Denied'";
+ //    }
+ //    elseif($_POST['query'] == 'Pending')
+ //    {
+ //        $q = "SELECT * FROM emails WHERE type='Pending'";
 
-    }
-    elseif($_POST['query'] == 'Pending')
-    {
-        $q = "SELECT * FROM emails WHERE type='Pending'";
+ //    }
+ //    elseif($_POST['query'] == 'Cancelled')
+ //    {
+ //        $q = "SELECT * FROM emails WHERE type='Cancelled'";
 
-    }
-    elseif($_POST['query'] == 'Cancelled')
-    {
-        $q = "SELECT * FROM emails WHERE type='Cancelled'";
+ //    }
+ //    else
+ //    {
+ //        //$q = "SELECT * FROM emails";
 
-    }
-    else
-    {
-        //$q = "SELECT * FROM emails";
-
+ //    }
+    if($_POST['query'].is_null()){
+        $q = "SELECT * FROM emails WHERE type='$typeholder'";
     }
 // Define the query for all records and fields sorted by the field chosen by the user
 
