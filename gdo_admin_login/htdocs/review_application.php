@@ -162,8 +162,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo 'log not submitted';
             }
 
+            $waiver_status = mysqli_query("SELECT * FROM applicant WHERE waiver_status = NULL");
+            if ($waiver_status == NULL) {
+                $c = mysqli_query($dbc, "SELECT waiver_status FROM applicant WHERE id=$id");
+                $wstatus = mysqli_fetch_assoc($c);
+                $waiver_status = $wstatus['waiver_status'];
+                $mailsubject = "Thank You for Your Girl's Day Out 2021 application. Please, submit your application waiver";
+                $mailcontents = "Please submit your application waiver as soon as possible.";
+                mail($waiver_status,$mailsubject,$mailcontents);
+                $log = "INSERT INTO log (id, type, mail_type, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'email',  'Waiver', '$logTime', '$logDate', '$logYear')";
+                if(mysqli_query($dbc, $log)){
+                    echo 'log submitted';
+                }
+                else{
+                    echo 'log not submitted';
+                }
+            }
         }
-        
+
         
         if(mysqli_query ($dbc, $q))
         {
