@@ -13,11 +13,11 @@
     $groupcountfetch = mysqli_fetch_assoc($groupquery);
     $groupcount = $groupcountfetch['groupcount'];
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		if(isset($_POST["removalquery"])){
-			$groupname = $_POST["removalquery"];
-            $removeGroup = mysqli_query($dbc, "DELETE FROM group_names WHERE group_name='$groupname'");
-            mysqli_query($dbc, $removeGroup);
-            echo 'Group Removed.';
+		if(isset($_POST["updatequery"])){
+			$groupname = $_POST["updatequery"];
+            $updateGroup = mysqli_query($dbc, "UPDATE applicants SET camp_group='$groupname' WHERE id='$id'");
+            mysqli_query($dbc, $updateGroup);
+            echo 'Group Updated.';
 		}
 		if(isset($_POST["newgroup"])){
 			$groupname = $_POST["newgroup"];
@@ -83,13 +83,13 @@
 				<p>Number of Groups: <?php echo $groupcount;?></p>
 			</div>
 	<div class="col" align="center">
-				<h3>Remove a Group</h3>
+				<h3>Update a Group</h3>
 			</div>
 	<!-- Group removal form -->
     <form class="form-inline row justify-content-center" action="<?php echo htmlentities($_SERVER['PHP_SELF'])?>" method="post">
         <div class="form-group  px-2">
-            <label for="group_removal" style="padding-right: 1em">Remove</label>
-            <select class="form-control" id="group_removal" name="removalquery">
+            <label for="group_update" style="padding-right: 1em">Update</label>
+            <select class="form-control" id="group_update" name="updatequery">
                 <option value="none" selected disabled hidden>Select an Option</option>
 <?php
 
@@ -107,9 +107,9 @@
          
             </select>
         </div> 
-        <button class="btn btn-primary mx-1" type="submit">Remove Group</button>                 
+        <button class="btn btn-primary mx-1" type="submit">Update Group</button>                 
     </form> 
-    <!-- end of  group removal html content -->
+    <!-- end of  group update html content -->
     <!-- Group adding form -->
     <div class="col" align="center">
 				<h3>Add a Group</h3>
