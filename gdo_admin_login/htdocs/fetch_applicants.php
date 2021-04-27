@@ -9,8 +9,8 @@
         //Pass it the query, then the connection to the db, and finally whatever you want the output to be named
         downloadThings($_SESSION['query'], $dbc, "applicant_data");
     }
-
     include_once("includes/header.php");
+    $currentyear = date("Y");
     
 	$page_title = 'Reports'; 
 	include_once ('includes/frame.html');
@@ -114,7 +114,7 @@ else
 	}
 	elseif($_POST['query'] == 'groups')
 	{
-		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name', camp_group AS 'Group Name' FROM applicant $order_by LIMIT $start, $display";
+		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name', camp_group AS 'Group Name' FROM applicant WHERE application_status = 'Approved' AND year_submitted = '$currentyear' ORDER BY camp_group LIMIT $start, $display";
 	}
 	elseif($_POST['query'] == 'contactInfo')
 	{
