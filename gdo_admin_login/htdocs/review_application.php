@@ -28,21 +28,30 @@ else
     exit();
 }
 
+
 // Check if the form has been submitted:
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $errors = 0;
-    
+
+    date_default_timezone_set("America/New_York");
+    $logDate = date("m-d");
+    $logTime = date("H:i");
+    $logYear = date("Y");
+
+    if(isset($_POST['updatequery'])){
+        $groupname = $_POST['updatequery'];
+        $updateGroup = mysqli_query($dbc, "UPDATE applicant SET camp_group='$groupname' WHERE id='$id'");
+        mysqli_query($dbc, $updateGroup);
+    }
+
     if (isset($_POST['update'])) 
     {
         $pq = mysqli_query($dbc, "SELECT application_status AS app_status FROM applicant WHERE id=$id");
         $prevStatusArray = mysqli_fetch_assoc($pq);
         $prevStatus = $prevStatusArray['app_status'];
         $update = mysqli_real_escape_string($dbc, $_POST['update']);
-        date_default_timezone_set("America/New_York");
-        $logDate = date("m-d");
-        $logTime = date("H:i");
-        $logYear = date("Y");
+
     } 
     else 
     {
@@ -162,22 +171,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo 'log not submitted';
             }
 
-            $waiver_status = mysqli_query("SELECT * FROM applicant WHERE waiver_status = NULL");
-            if ($waiver_status == NULL) {
-                $c = mysqli_query($dbc, "SELECT waiver_status FROM applicant WHERE id=$id");
-                $wstatus = mysqli_fetch_assoc($c);
-                $waiver_status = $wstatus['waiver_status'];
-                $mailsubject = "Thank You for Your Girl's Day Out 2021 application. Please, submit your application waiver";
-                $mailcontents = "Please submit your application waiver as soon as possible.";
-                mail($waiver_status,$mailsubject,$mailcontents);
-                $log = "INSERT INTO log (id, type, mail_type, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'email',  'Waiver', '$logTime', '$logDate', '$logYear')";
-                if(mysqli_query($dbc, $log)){
-                    echo 'log submitted';
-                }
-                else{
-                    echo 'log not submitted';
-                }
-            }
+            //Emails the applicant about waivers
+            // $waiver_status = mysqli_query("SELECT * FROM applicant WHERE waiver_status = NULL");
+            // if ($waiver_status == NULL) {
+            //     $c = mysqli_query($dbc, "SELECT waiver_status FROM applicant WHERE id=$id");
+            //     $wstatus = mysqli_fetch_assoc($c);
+            //     $waiver_status = $wstatus['waiver_status'];
+            //     $mailsubject = "Thank You for Your Girl's Day Out 2021 application. Please, submit your application waiver";
+            //     $mailcontents = "Please submit your application waiver as soon as possible.";
+            //     mail($waiver_status,$mailsubject,$mailcontents);
+            //     $log = "INSERT INTO log (id, type, mail_type, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'email',  'Waiver', '$logTime', '$logDate', '$logYear')";
+            //     if(mysqli_query($dbc, $log)){
+            //         echo 'log submitted';
+            //     }
+            //     else{
+            //         echo 'log not submitted';
+            //     }
+            // }
         }
 
         
@@ -194,30 +204,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $nextresult = mysqli_fetch_assoc($next);
                 $rnext = $nextresult['minimum'];
                 
-                $approved = mysqli_query($dbc, "SELECT MIN(id) as minimum FROM applicant WHERE application_status='Approved' AND year_submitted='$year'");
-                $approvedResult = mysqli_fetch_assoc($approved);
-                $approvedApp = $approvedResult['minimum'];
-                
-                if($approvedApp['minimum'] != 0)
-                {
-                    $s = mysqli_query($dbc, "UPDATE applicant SET application_status='Approved' WHERE id=$approvedApp");
-                    mysqli_query($dbc, $s);
-                }
-
-                //sends an email to the student to notify them of their change in status from Pending to Approved
-                $m = mysqli_query($dbc, "SELECT email FROM applicant WHERE id=$approvedApp");
-                $mail = mysqli_fetch_assoc($m);
-                $studentemail = $mail['email'];
-                $mailsubject = "An update to your Girl's Day Out $year application status";
-                $mailcontents = "To view your Girls Day Out $year application decision, log in to your application portal. If you need anything at all, just let us know. Thank you for applying to the Girls Day Out 2021!";
-                if (mail($studentemail,$mailsubject,$mailcontents))
-                {
-                    echo 'An email has been sent to ', $studentemail;
-                }
-                else
-                {
-                    echo 'Email failed to send to ', $studentemail;
-                }  
                        
                 if($rnext['minimum'] != 0)
                 {
@@ -617,7 +603,63 @@ if (mysqli_num_rows($r) == 1)
             </section>
             
             </fieldset>
+
+
             </form>
+                    <fieldset class="border border-dark p-2">
+            <legend class="w-50">Group Information</legend>
+            <section class="row">
+                <article class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="form-group row">
+                        <label for="gName" class=" col-sm-4 col-form-label">Group Name: </label>
+                        <div class="col-sm-8">
+                            <label class="form-control-plaintext" style="color: #356f94; font-style: italic;" id="gName">'. @$row['camp_group'] .'</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="gChange" class=" col-sm-4 col-form-label">Change Group: </label>
+                        <div class="col-sm-8">
+                        <form class="form-inline row justify-content-center" action="review_application.php" method="POST">';
+                        ?>
+               
+                    <div class="form-group  px-2">
+                            <select class="form-control" id="updatequery" name="updatequery">
+                            <option value="none" selected disabled hidden>Select an Option</option>
+                        <?php
+
+                            $gquery = "SELECT group_name FROM group_names";
+                                    
+                            $gr = mysqli_query($dbc, $gquery); 
+                                   
+                            // Fetch and print all the records:
+                            while ($grow = mysqli_fetch_array($gr, MYSQLI_ASSOC)) 
+                            {
+                                echo '<option>'. @$grow['group_name'] .'</option>';
+                            }
+                                 
+                        ?>
+
+                     <?php
+                     echo '
+                        </select>
+                    </div> 
+                    <button class="btn btn-primary mx-1" type="submit">Update Group</button>
+                    <input type="hidden" name="id" value="' . $id . '" />                 
+                </form> 
+                        </div>
+                    </div>
+                </article>
+                <article class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="form-group row">
+                        <label for="gVolunteer" class=" col-sm-4 col-form-label">Group Leader: </label>
+                        <div class="col-sm-8">
+                            <label class="form-control-plaintext" style="color: #356f94; font-style: italic;" id="gVolunteer">'. 'Feature Incomplete' .'</label>
+                        </div>
+                    </div>
+                </article>
+            </section>
+            
+            </fieldset>
 
 
             <form class="fixed-bottom bg-secondary p-4 rounded" action="review_application.php" method="POST">

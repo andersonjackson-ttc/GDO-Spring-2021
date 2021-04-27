@@ -44,7 +44,7 @@
         $fName = preg_split("/[\s]/", $query);
         // $fName[0] = "bill";
         
-        $q2 = "SELECT `applicant`.`first_name`, `emergency_contact`.*
+        $q2 = "SELECT `applicant`.`first_name`, `applicant`.`allergies`, `applicant`.`medications`, `emergency_contact`.*
         FROM `applicant`
         INNER JOIN `emergency_contact` ON `applicant`.`id` = `emergency_contact`.`id` WHERE `applicant`.`first_name` LIKE  '".$fName[1] ."'" ;
 
@@ -83,6 +83,18 @@
                     <label for="relationship" class="col-sm-2 col-form-label">Relationship to Student:</label>
                     <div class="col-sm-10">
                         <label class="form-control-plaintext" id="relationship">'. @$row['contact_relationship'] .'</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="studentAllergies" class="col-sm-2 col-form-label">Allergies:</label>
+                    <div class="col-sm-10">
+                        <label class="form-control-plaintext" id="studentAllergies"> '. @$row['allergies'] .'</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="studentMedications" class="col-sm-2 col-form-label">Medications:</label>
+                    <div class="col-sm-10">
+                        <label class="form-control-plaintext" id="studentMedications> '. $row['medications'] .'</label>
                     </div>
                 </div>
                 </form>';
