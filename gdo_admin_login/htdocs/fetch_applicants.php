@@ -102,7 +102,7 @@ else
 
 	if($_POST['query'] == 'everything')
 	{
-		$q = "SELECT `a`.`last_name` AS 'Last Name', `a`.`first_name` AS 'First Name',`a`.`address` AS 'Address',`a`.`city` AS 'City',`a`.`state` AS 'State',`a`.`zip_code` AS 'Zip Code',`a`.`date_of_birth` AS 'DOB',`a`.`age` AS 'Age', `a`.`email` AS 'Email Address',`a`.`school_attending_in_fall` AS 'School', `a`.`college_of_interest` AS 'College of Interest', `a`.`shirt_size` AS 'T-Shirt Size',`p`.`primary_parent_first_name` AS 'Primary Guardian First Name', `p`.`primary_parent_last_name` AS ' Primary Guardian Last Name', `p`.`primary_parent_email` AS 'Primary Guardian Email', `p`.`primary_parent_address` AS 'Primary Guardian Address', `p`.`primary_parent_primary_phone` AS 'Primary Guardian Phone Number', `e`.`contact_name` AS 'Emergency Contact Name',`e`.`contact_relationship` AS 'Relationship to Child', `e`.`contact_address` AS 'Emergency Contact Address', `e`.`contact_primary_phone` AS 'Emergency Contact Phone', `a`.`allergies` AS 'Food Allergies'
+		$q = "SELECT `a`.`id` AS 'Review', `a`.`last_name` AS 'Last Name', `a`.`first_name` AS 'First Name', `a`.`camp_group` AS 'Group', `a`.`address` AS 'Address',`a`.`city` AS 'City',`a`.`state` AS 'State',`a`.`zip_code` AS 'Zip Code',`a`.`date_of_birth` AS 'DOB',`a`.`age` AS 'Age', `a`.`email` AS 'Email Address',`a`.`school_attending_in_fall` AS 'School', `a`.`college_of_interest` AS 'College of Interest', `a`.`shirt_size` AS 'T-Shirt Size',`p`.`primary_parent_first_name` AS 'Primary Guardian First Name', `p`.`primary_parent_last_name` AS ' Primary Guardian Last Name', `p`.`primary_parent_email` AS 'Primary Guardian Email', `p`.`primary_parent_address` AS 'Primary Guardian Address', `p`.`primary_parent_primary_phone` AS 'Primary Guardian Phone Number', `e`.`contact_name` AS 'Emergency Contact Name',`e`.`contact_relationship` AS 'Relationship to Child', `e`.`contact_address` AS 'Emergency Contact Address', `e`.`contact_primary_phone` AS 'Emergency Contact Phone', `a`.`allergies` AS 'Food Allergies'
 			FROM `applicant` AS `a` 
 			LEFT JOIN `emergency_contact` AS `e` ON `e`.`id` = `a`.`id` 
 			LEFT JOIN `parent` AS `p` ON `p`.`id` = `a`.`id` $order_by LIMIT $start, $display";
@@ -110,11 +110,11 @@ else
 	}
 	elseif($_POST['query'] == 'basic')
 	{
-		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name',address AS 'Address',city AS 'City',state AS 'State',zip_code AS 'Zip Code',date_of_birth AS 'DOB',rising_grade_level AS 'Rising Grade Level' FROM applicant $order_by LIMIT $start, $display";
+		$q = "SELECT id AS 'Review', last_name AS 'Last Name', first_name AS 'First Name',address AS 'Address',city AS 'City',state AS 'State',zip_code AS 'Zip Code',date_of_birth AS 'DOB',rising_grade_level AS 'Rising Grade Level' FROM applicant $order_by LIMIT $start, $display";
 	}
 	elseif($_POST['query'] == 'groups')
 	{
-		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name', camp_group AS 'Group Name' FROM applicant WHERE application_status = 'Approved' AND year_submitted = '$currentyear' ORDER BY camp_group LIMIT $start, $display";
+		$q = "SELECT id AS 'Review', last_name AS 'Last Name', first_name AS 'First Name', camp_group AS 'Group Name' FROM applicant WHERE application_status = 'Approved' AND year_submitted = '$currentyear' ORDER BY camp_group LIMIT $start, $display";
 	}
 	elseif($_POST['query'] == 'contactInfo')
 	{
@@ -127,11 +127,11 @@ else
 	}
 	elseif($_POST['query'] == 'allergies')
 	{
-		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name', camp_group AS 'Group Name', `a`.`allergies` AS 'Food Allergies', `a`.`medications` AS 'Medications', `e`.`contact_primary_phone` AS 'Emergency Contact Phone' FROM applicant a JOIN emergency_contact e ON e.id = a.id WHERE LENGTH(a.allergies) > 0 OR LENGTH(a.medications) > 0 IS NOT NULL ORDER BY last_name ASC, first_name ASC LIMIT $start, $display";
+		$q = "SELECT `a`.`id` AS 'Review', last_name AS 'Last Name', first_name AS 'First Name', camp_group AS 'Group Name', `a`.`allergies` AS 'Food Allergies', `a`.`medications` AS 'Medications', `e`.`contact_primary_phone` AS 'Emergency Contact Phone' FROM applicant a JOIN emergency_contact e ON e.id = a.id WHERE (LENGTH(a.allergies) > 1 OR LENGTH(a.medications) > 1) AND `a`.`year_submitted` = $currentyear AND `a`.`application_status` = 'Approved' ORDER BY last_name ASC, first_name ASC LIMIT $start, $display";
 	}
 	else
 	{
-		$q = "SELECT last_name AS 'Last Name', first_name AS 'First Name',address AS 'Address',city AS 'City',state AS 'State',zip_code AS 'Zip Code',phone_number AS 'Phone Number',date_of_birth AS 'DOB',rising_grade_level AS 'Rising Grade Level' FROM applicant $order_by LIMIT $start, $display";	
+		$q = "SELECT id AS 'Review', last_name AS 'Last Name', first_name AS 'First Name',address AS 'Address',city AS 'City',state AS 'State',zip_code AS 'Zip Code',phone_number AS 'Phone Number',date_of_birth AS 'DOB',rising_grade_level AS 'Rising Grade Level' FROM applicant $order_by LIMIT $start, $display";	
 	}
 // Define the query for all records and fields sorted by the field chosen by the user
 
@@ -163,8 +163,7 @@ $r = @mysqli_query ($dbc, $q); // Run the query.->
 
 		echo '<tr class='.$color.'>';
 
-		if($_POST['query'] == 'contactInfo' || $_POST['query'] == 'adminLogs'){
-			while($i < mysqli_field_count($dbc))
+		while($i < mysqli_field_count($dbc))
 			{
 				if($i == 0){
 					echo '<td><a href="review_application.php?id=' . $row[0] . '">Review</a></td>';
@@ -172,23 +171,9 @@ $r = @mysqli_query ($dbc, $q); // Run the query.->
 				else{
 					echo '<td>'.$row[$i].'</td>';
 				}
-				//echo '<td>'.$row[$i].'</td>';
 				$i++;
 			}
-		}
-		else{
-			while($i < mysqli_field_count($dbc))
-			{
-				/*if($i == 0){
-					echo '<td><a href="review_application.php?record_id=' . $row[0] . '">$row[0]</a></td>';
-				}
-				else{
-					echo '<td>'.$row[$i].'</td>';
-				}*/
-				echo '<td>'.$row[$i].'</td>';
-				$i++;
-			}
-		}
+
 		
 		echo '</tr>';
 		$x++;

@@ -6,6 +6,7 @@
 	$page_title = 'Send a Message'; 
 	include_once ('includes/frame.html');
 
+    //The beginnings of a form to send a message to applicants
     if($_SERVER['REQUEST_METHOD'] == 'POST'){
         if(!empty($_POST['subject']) && !empty($_POST['message'])){
             $body = "Subject: {$_POST['subject']}\nMessage: {$_POST['message']}";
