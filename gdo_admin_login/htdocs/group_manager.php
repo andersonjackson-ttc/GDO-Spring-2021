@@ -44,7 +44,7 @@
     			while ($aidarray = mysqli_fetch_array($appidset, MYSQLI_ASSOC)){
 			        $appidarray[] = $aidarray['id'];
 			    }
-				//WHILE we still have IDS in ID array to go through
+				//WHILE we still have IDS in ID array to go through(assignIndex), it will continue assigning ids to groups
 				$groupindex = 0;
 				$idindex = 0;
 				$assignindex = 0;
@@ -54,7 +54,7 @@
 					$groupmassassignquery = "UPDATE applicant SET camp_group = '$tempgname' WHERE id = '$tempaid'";
 					$idindex+=count($groupnamesarray);
 					$assignindex++;
-
+					//this will insert into the update query and ensure that each group is as evenly distributed as possible
 					while($idindex < count($appidarray)){
 						$tempaid = $appidarray[$idindex];
 						$groupmassassignquery .= " OR id = '$tempaid'";
@@ -62,6 +62,7 @@
 						$assignindex++;
 					}
 					$groupmassassignquery .= ";";
+					//executes the mysql query to assign all ids to a single group before restarting the process with the next group
 		            $assigngroupset = mysqli_query($dbc, $groupmassassignquery);
 		            mysqli_query($dbc, $assigngroupset);
 					$groupindex++;

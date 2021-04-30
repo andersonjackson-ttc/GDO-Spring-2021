@@ -13,25 +13,11 @@
 <div class="row justify-content-center">
 			<div class="col" align="center">
 				<h1>Change Contents of Emails</h1>
+                <!-- dropdown for types of emails that can be modified -->
 	<form class="justify-content-center" action="modify_email.php" method="post">
 	 	<label for="query">Type of Email to Update</label>
 		<select name="query" class="mx-3">
 			<?php
-			// if(isset($_POST["query"]))
-			// {
-			// 	echo '<option value="Approved"'; if (($_POST['query'])=='Approved'){echo 'selected';} echo '>Approved</option>
-			// 	<option value="Pending"'; if (($_POST['query'])=='Pending'){echo 'selected';} echo '>Pending</option>
-		 // 		<option value="Denied"'; if (($_POST['query'])=='Denied'){echo 'selected';} echo '>Denied</option>
-		 // 		<option value="Cancelled"'; if (($_POST['query'])=='Cancelled'){echo 'selected';} echo '>Cancelled</option>';
-
-			// }
-			// else
-			// {
-			// 	echo '<option value="Approved">Approved</option>
-			// 	<option value="Pending">Pending</option>
-		 // 		<option value="Denied">Denied</option>
-		 // 		<option value="Cancelled">Cancelled</option>';
-			// }
             $dropdownquery = "SELECT type FROM emails";
                     
             $dropdownrow = mysqli_query($dbc, $dropdownquery); 
@@ -60,32 +46,8 @@ else
 {
 	$start = 0;
 }
+    //stores the type of email to be modified
     $typeholder = $_POST['query'];
-	// if($_POST['query'] == 'Approved')
-	// {
-	// 	$q = "SELECT * FROM emails WHERE type='Approved'";
-
-	// }
-	// elseif($_POST['query'] == 'Denied')
- //    {
- //        $q = "SELECT * FROM emails WHERE type='Denied'";
-
- //    }
- //    elseif($_POST['query'] == 'Pending')
- //    {
- //        $q = "SELECT * FROM emails WHERE type='Pending'";
-
- //    }
- //    elseif($_POST['query'] == 'Cancelled')
- //    {
- //        $q = "SELECT * FROM emails WHERE type='Cancelled'";
-
- //    }
- //    else
- //    {
- //        //$q = "SELECT * FROM emails";
-
- //    }
     if($_POST['query'].is_null()){
         $q = "SELECT * FROM emails WHERE type='$typeholder'";
     }
@@ -149,6 +111,7 @@ $r = @mysqli_query ($dbc, $q); // Run the query.->
     }
     else
     {
+        //stores the query value for use when the form is submit for modification
         $testingQuery = $_POST['query'];
         echo '<form class="form-inline row justify-content-center pt-4" method="post" action="modify_email.php">
                 <input type="hidden" name="testquery" value="'.$testingQuery.'">

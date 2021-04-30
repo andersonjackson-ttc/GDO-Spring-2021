@@ -33,18 +33,19 @@ else
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     $errors = 0;
-
+    //set the time for logging purposes
     date_default_timezone_set("America/New_York");
     $logDate = date("m-d");
     $logTime = date("H:i");
     $logYear = date("Y");
 
+    //updates the group of the page's current applicant
     if(isset($_POST['updatequery'])){
         $groupname = $_POST['updatequery'];
         $updateGroup = mysqli_query($dbc, "UPDATE applicant SET camp_group='$groupname' WHERE id='$id'");
         mysqli_query($dbc, $updateGroup);
     }
-
+    //updates the status of an applicant(approved, denied, cancelled etc)
     if (isset($_POST['update'])) 
     {
         $pq = mysqli_query($dbc, "SELECT application_status AS app_status FROM applicant WHERE id=$id");
@@ -100,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
+        //The following statements both log and send emails
         if ($update == "Cancelled") {
             $m = mysqli_query($dbc, "SELECT email FROM applicant WHERE id=$id");
             $mail = mysqli_fetch_assoc($m);
@@ -110,8 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $cont = mysqli_query($dbc, "SELECT contents FROM emails WHERE type='$update'");
             $contentline = mysqli_fetch_assoc($cont);
             $mailcontents = $contentline['contents'];
-            // $mailsubject = "Your Girl's Day Out 2021 application has been cancelled";
-            // $mailcontents = "Your application to Girl's Day Out 2021 has been cancelled by an administrator. If you believe this cancellation has been an error, please contact us through the website from the Contact Us page.";
             mail($studentemail,$mailsubject,$mailcontents);
             $log = "INSERT INTO log (id, type, changed_by, changed_to, changed_from, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'status', 'Admin', '$update', '$prevStatus', '$logTime', '$logDate', '$logYear')";
             if(mysqli_query($dbc, $log)){
@@ -133,12 +133,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $cont = mysqli_query($dbc, "SELECT contents FROM emails WHERE type='$update'");
             $contentline = mysqli_fetch_assoc($cont);
             $mailcontents = $contentline['contents'];
-            // $mailsubject = "Your Girl's Day Out 2021 application has been denied";
             if ($deny != null) {
                 $mailcontents .= "\nReason for denial: $deny";
             }
             else{
-                // $mailcontents = "Your application to Girl's Day Out 2021 has been denied by an administrator. We appreciate your interest in Girl's Day Out.";
             }
             mail($studentemail,$mailsubject,$mailcontents);
             $log = "INSERT INTO log (id, type, changed_by, changed_to, changed_from, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'status', 'Admin', '$update', '$prevStatus', '$logTime', '$logDate', '$logYear')";
@@ -160,8 +158,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $cont = mysqli_query($dbc, "SELECT contents FROM emails WHERE type='$update'");
             $contentline = mysqli_fetch_assoc($cont);
             $mailcontents = $contentline['contents'];
-            // $mailsubject = "Your Girl's Day Out 2021 application has been approved";
-            // $mailcontents = "Your application to Girl's Day Out 2021 has been approved by an administrator. Congratulation We appreciate your interest in Girl's Day Out.";
             mail($studentemail,$mailsubject,$mailcontents);
             $log = "INSERT INTO log (id, type, changed_by, changed_to, changed_from, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'status', 'Admin', '$update', '$prevStatus', '$logTime', '$logDate', '$logYear')";
             if(mysqli_query($dbc, $log)){
@@ -170,29 +166,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             else{
                 echo 'log not submitted';
             }
-
-            //Emails the applicant about waivers
-            // $waiver_status = mysqli_query("SELECT * FROM applicant WHERE waiver_status = NULL");
-            // if ($waiver_status == NULL) {
-            //     $c = mysqli_query($dbc, "SELECT waiver_status FROM applicant WHERE id=$id");
-            //     $wstatus = mysqli_fetch_assoc($c);
-            //     $waiver_status = $wstatus['waiver_status'];
-            //     $mailsubject = "Thank You for Your Girl's Day Out 2021 application. Please, submit your application waiver";
-            //     $mailcontents = "Please submit your application waiver as soon as possible.";
-            //     mail($waiver_status,$mailsubject,$mailcontents);
-            //     $log = "INSERT INTO log (id, type, mail_type, time_submitted, date_submitted, year_submitted) VALUES ('$id', 'email',  'Waiver', '$logTime', '$logDate', '$logYear')";
-            //     if(mysqli_query($dbc, $log)){
-            //         echo 'log submitted';
-            //     }
-            //     else{
-            //         echo 'log not submitted';
-            //     }
-            // }
+            //end of email and logging code
         }
 
         
         if(mysqli_query ($dbc, $q))
         {
+            //emails and sets the status of the next applicant on the waitlist whenever space is freed up in the pending applicant list
             $s = mysqli_query($dbc, "SELECT count(*) as count FROM applicant WHERE application_status='Approved' OR application_status='Pending'");
             $t = mysqli_query($dbc, "SELECT max_applicants as max FROM max_applicants");
             $rs = mysqli_fetch_assoc($s);
@@ -219,8 +199,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $cont = mysqli_query($dbc, "SELECT contents FROM emails WHERE type='Pending'");
                     $contentline = mysqli_fetch_assoc($cont);
                     $mailcontents = $contentline['contents'];
-                    // $mailsubject = "An update to your Girl's Day Out $year application status";
-                    // $mailcontents = "Your application has moved from the wait list, and is now awaiting review by our approval staff.\n If you have any questions regarding this email, please contact us on the Girl's Day Out website contact page.";
                     if (mail($studentemail,$mailsubject,$mailcontents))
                     {
                         

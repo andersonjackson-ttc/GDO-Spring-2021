@@ -138,6 +138,12 @@ CREATE TABLE `hibernate_sequence` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Dumping data for table `hibernate_sequence`
+--
+INSERT INTO admin_login.hibernate_sequence VALUES (1000);
+COMMIT;
+
+--
 -- Table structure for table `log`
 --
 
